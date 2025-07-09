@@ -20,6 +20,10 @@ export default function AttendanceCalendar() {
     setAbsentDays(newSet);
   };
 
+  const resetAbsentDays = () => {
+    setAbsentDays(new Set());
+  };
+
   const attendanceRate = ((daysInMonth - absentDays.size) / daysInMonth) * 100;
 
   return (
@@ -65,11 +69,14 @@ export default function AttendanceCalendar() {
       <button
         className={styles.backButton}
         onClick={() => {
-          alert('ログイン画面へ');
+          alert('ログイン画面へ戻ります');
           router.push('/');
         }}
       >
         戻る
+      </button>
+     <button className={styles.resetButton} onClick={resetAbsentDays}>
+        リセット
       </button>
     </div>
   );;
