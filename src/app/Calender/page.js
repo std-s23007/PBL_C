@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './page.module.css';  // ここでCSSモジュールをimport
 
 export default function AttendanceCalendar() {
-    const router = useRouter();
+  const router = useRouter();
   const daysInMonth = 31; // 1〜31日
   const [absentDays, setAbsentDays] = useState(new Set());
 
@@ -22,10 +23,10 @@ export default function AttendanceCalendar() {
   const attendanceRate = ((daysInMonth - absentDays.size) / daysInMonth) * 100;
 
   return (
-    <div style={styles.container}>
+    <div className={styles.container}>
       <h2>○月 出席記録</h2>
 
-      <table style={styles.table}>
+      <table className={styles.table}>
         <thead>
           <tr>
             <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th><th>日</th>
@@ -44,12 +45,8 @@ export default function AttendanceCalendar() {
                   <td
                     key={dayIndex}
                     onClick={() => toggleAbsent(day)}
-                    style={{
-                      ...styles.dayCell,
-                      backgroundColor: isAbsent ? '#f88' : '#cfc',
-                      cursor: 'pointer',
-                      userSelect: 'none',
-                    }}
+                    className={styles.dayCell}
+                    style={{ backgroundColor: isAbsent ? '#f88' : '#cfc' }}
                     title={isAbsent ? '欠席' : '出席'}
                   >
                     {day}
@@ -61,50 +58,19 @@ export default function AttendanceCalendar() {
         </tbody>
       </table>
 
-      <div style={styles.rate}>
+      <div className={styles.rate}>
         出席率: {attendanceRate.toFixed(1)}%
       </div>
 
       <button
-        style={styles.backButton}
-        onClick={() => { router.push('/');
+        className={styles.backButton}
+        onClick={() => {
           alert('ログイン画面へ');
+          router.push('/');
         }}
       >
         戻る
       </button>
     </div>
-  );
-}
-
-const styles = {
-  container: {
-    maxWidth: 400,
-    margin: '40px auto',
-    fontFamily: 'sans-serif',
-    textAlign: 'center',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginBottom: 20,
-  },
-  dayCell: {
-    border: '1px solid #ccc',
-    padding: 10,
-    width: '14.28%',
-  },
-  rate: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  backButton: {
-    padding: '10px 20px',
-    fontSize: 16,
-    borderRadius: 5,
-    border: 'none',
-    backgroundColor: '#1976d2',
-    color: 'white',
-    cursor: 'pointer',
-  },
+  );;
 };
