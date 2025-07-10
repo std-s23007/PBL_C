@@ -19,7 +19,7 @@ export default function Home() {
   };
   return (
     <main className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">レビュー投稿</h1>
+      <h1 className="text-2xl font-bold mb-4">欠席理由</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="text"
@@ -38,7 +38,7 @@ export default function Home() {
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded"
         >
-          投稿
+          送信
         </button>
       </form>
       <div className="mt-6">

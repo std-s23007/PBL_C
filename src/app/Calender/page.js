@@ -75,9 +75,19 @@ export default function AttendanceCalendar() {
       >
         戻る
       </button>
+      
      <button className={styles.resetButton} onClick={resetAbsentDays}>
         リセット
       </button>
+
+      <button
+  onClick={() => {
+    alert('欠席理由記入画面に移動します');
+    router.push('/Reason'); //  Reasonページへ遷移
+  }}
+>
+  欠席理由
+</button>
     </div>
   );;
 };
