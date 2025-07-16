@@ -44,3 +44,14 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.reasonButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-left: 10px;
+  background-color: #c0392b; /* ログイン画面の青 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

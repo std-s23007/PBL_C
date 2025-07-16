@@ -80,7 +80,7 @@ export default function AttendanceCalendar() {
         リセット
       </button>
 
-      <button
+      <button className={styles.reasonButton}
   onClick={() => {
     alert('欠席理由記入画面に移動します');
     router.push('/Reason'); //  Reasonページへ遷移
