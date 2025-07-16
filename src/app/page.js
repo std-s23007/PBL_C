@@ -40,6 +40,17 @@ export default function Home() {
       setMessage("学籍IDとパスワードを入力してください");
       return;
     }
+  
+    // 管理者ログインチェック
+    const adminId = "s23000";
+    const adminName = "管理者";
+    const adminPass = "admin123";
+
+    if (studentId === adminId && password === adminPass && name === adminName) {
+      setMessage("管理者としてログインしました！");
+      router.push("/Admin"); // 管理者ページへ遷移
+    return;
+  }
 
     try {
       // 学籍番号とパスワードで検索
