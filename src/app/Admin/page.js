@@ -1,17 +1,27 @@
 'use client';
 
+import styles from './page.module.css';
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { initializeApp, getApps } from "firebase/app";
+import { useRouter } from 'next/navigation';
 
 const firebaseConfig = {
-  // あなたのfirebaseConfigをここに
+  apiKey: "AIzaSyDug6k408E81owFyQNA98YjikBAqGlE7mM",
+  authDomain: "pbl-c-54088.firebaseapp.com",
+  projectId: "pbl-c-54088",
+  storageBucket: "pbl-c-54088.appspot.com",
+  messagingSenderId: "44768519903",
+  appId: "1:44768519903:web:6b8a002e5981bb1300ab6a",
+  measurementId: "G-D8B3QJG0G9"
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const db = getFirestore(app);
 
 export default function AdminPage() {
+  const router = useRouter();  // ←ここを追加
+
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,35 +50,42 @@ export default function AdminPage() {
     }
   };
 
-  if (loading) return <p>読み込み中...</p>;
+  if (loading) return <p className={styles.message}>読み込み中...</p>;
 
   return (
-    <main>
-      <h1>管理者画面</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>管理者画面</h1>
       {students.length === 0 ? (
-        <p>登録データなし</p>
+        <p className={styles.message}>登録データなし</p>
       ) : (
-        <table border={1}>
+        <table className={styles.table}>
           <thead>
             <tr>
-              <th>学籍番号</th>
-              <th>氏名</th>
-              <th>操作</th>
+              <th className={styles.th}>学籍番号</th>
+              <th className={styles.th}>氏名</th>
+              <th className={styles.th}>操作</th>
             </tr>
           </thead>
           <tbody>
             {students.map(student => (
-              <tr key={student.id}>
-                <td>{student.学籍番号}</td>
-                <td>{student.氏名}</td>
-                <td>
-                  <button onClick={() => handleDelete(student.id)}>削除</button>
+              <tr key={student.id} className={styles.row}>
+                <td className={styles.td}>{student.学籍番号}</td>
+                <td className={styles.td}>{student.氏名}</td>
+                <td className={styles.td}>
+                  <button className={styles.deletebutton} onClick={() => handleDelete(student.id)}>
+                    削除
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+      <button className={styles.backButton} onClick={() => 
+      {alert('ログイン画面へ戻ります');
+      router.push('/')}}>
+          戻る
+      </button>
     </main>
   );
 }
