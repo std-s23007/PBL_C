@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function AttendanceCalendar() {
 
+      const router = useRouter();
   const daysInMonth = 31;
   const [absentDays, setAbsentDays] = useState(new Set());
   const [selectedDay, setSelectedDay] = useState(null);
@@ -91,6 +93,9 @@ const toggleAbsent = (number) => {
       <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
         <button
           className={styles.backButton}
+          onClick={() => {
+            router.push('/');
+          }}
         >
           戻る
         </button>
