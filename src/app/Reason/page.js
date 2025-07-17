@@ -43,7 +43,7 @@ export default function Home() {
       </form>
 
       <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">投稿一覧</h2>
+        <h2 className="text-xl font-semibold mb-2">投稿一覧a</h2>
         {reviews.map((r, index) => (
           <div key={index} className="border-b py-2">
             <p className="font-bold">{r.name}</p>
