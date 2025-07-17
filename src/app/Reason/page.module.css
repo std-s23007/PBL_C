@@ -41,7 +41,7 @@
 }
 
 .cancelbutton {
-  background-color: #e74c3c;
+  background-color: #888;
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
@@ -51,7 +51,7 @@
 }
 
 .cancelbutton:hover {
-  background-color: #c0392b;
+  background-color: #666;
 }
 
 .reviewSection {
