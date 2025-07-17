@@ -49,7 +49,7 @@ export default function Home() {
         </button>
         <button
           className={styles.cancelbutton}
-          onClick={() => router.push('../Calender')}
+          onClick={() => router.push('../Calendar')}
         >
           キャンセル
         </button>
