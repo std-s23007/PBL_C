@@ -9,31 +9,52 @@ import styles from "./page.module.css";
 export default function LoginPage() {
   const router = useRouter();
   const [date, setDate] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [adminClickCount, setAdminClickCount] = useState(0);
 
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-      router.push("/Calendar"); // ログイン後にカレンダーページへ遷移
+      router.push("/Calendar");
     } catch (error) {
       console.error("ログイン失敗:", error);
     }
   };
 
   useEffect(() => {
-    // 今日の日付をセット
     const today = new Date();
     const formatted = today.toLocaleDateString("ja-JP");
     setDate(formatted);
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/Calendar"); // ログイン済みならカレンダーへ遷移
+      if (user) router.push("/Calendar");
     });
     return () => unsubscribe();
   }, [router]);
 
+  const handleHiddenClick = () => {
+    setAdminClickCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= 5) {
+        router.push("/Adminlogin");
+      }
+      return newCount;
+    });
+  };
+
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>ログイン</h1>
+      {/* ログインテキストを囲むrelative親要素 */}
+      <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
+        <h1 className={styles.title}>ログイン</h1>
+
+        {/* 透明の隠しクリック用ボタン */}
+        <div
+          onClick={handleHiddenClick}
+          className={styles.hiddenButton}
+          aria-hidden="true"
+        />
+      </div>
 
       <div className={styles.formGroup}>
         <label>日付</label>
@@ -46,3 +67,4 @@ export default function LoginPage() {
     </main>
   );
 }
+
