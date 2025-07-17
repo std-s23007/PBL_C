@@ -14,9 +14,9 @@ export default function SimpleLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (username === "itcollege" && password === "s23400") {
-      // 認証成功 → Adminページへ遷移
-      router.push("/Admin");
+    if (username === "s23400" && password === "Itcollege") {
+      localStorage.setItem("isAdmin", "true"); // 認証情報を保存
+      router.push("/Admin"); // 管理者ページへ移動
     } else {
       setError("ユーザー名かパスワードが違います");
     }
