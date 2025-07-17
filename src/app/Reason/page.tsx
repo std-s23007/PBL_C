@@ -30,13 +30,6 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">欠席理由</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
-          type="text"
-          placeholder="日付"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border p-2 w-full"
-        />
-        <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
