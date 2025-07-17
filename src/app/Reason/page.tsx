@@ -2,6 +2,7 @@
 "use client";
 import styles from "./page.module.css"
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 type Review = {
   name: string;
   comment: string;
@@ -10,6 +11,7 @@ export default function Home() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name && comment) {
@@ -42,11 +44,10 @@ export default function Home() {
           登録
         </button>
         <button
-          className={styles.button}
-          style={{ backgroundColor: '#888' }}
-          onClick={() => router.push('/')}
+          className={styles.cancelbutton}
+          onClick={() => router.push('../Calender')}
         >
-          戻る
+          キャンセル
         </button>
       </form>
       <div className="mt-6">
