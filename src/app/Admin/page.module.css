@@ -50,7 +50,7 @@
   transition: background-color 0.2s ease;
 }
 
-.button:hover {
+.deletebutton:hover {
   background-color: #c0392b;
 }
 
