@@ -1,5 +1,6 @@
 // app/page.tsx
 "use client";
+import styles from "./page.module.css"
 import { useState } from "react";
 type Review = {
   name: string;
@@ -23,22 +24,29 @@ export default function Home() {
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="text"
-          placeholder="名前"
+          placeholder="日付"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="border p-2 w-full"
         />
         <textarea
-          placeholder="コメント"
+          placeholder="欠席理由"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           className="border p-2 w-full"
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className={styles.button}
         >
-          送信
+          登録
+        </button>
+        <button
+          className={styles.button}
+          style={{ backgroundColor: '#888' }}
+          onClick={() => router.push('/')}
+        >
+          戻る
         </button>
       </form>
       <div className="mt-6">
