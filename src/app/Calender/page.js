@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function AttendanceCalendar() {
-
-      const router = useRouter();
+  const router = useRouter();
   const daysInMonth = 31;
   const [absentDays, setAbsentDays] = useState(new Set());
-  const [selectedDay, setSelectedDay] = useState(null);
-  const [reasons, setReasons] = useState(new Map());
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+const [reasons, setReasons] = useState<Map<number>>(new Map());
+
   const [reasonInput, setReasonInput] = useState('');
   const [isReasonFormVisible, setIsReasonFormVisible] = useState(false);
 
@@ -26,6 +26,7 @@ const toggleAbsent = (number) => {
   }
   setAbsentDays(newSet);
 };
+
 
   const resetAbsentDays = () => {
     setAbsentDays(new Set());
@@ -104,30 +105,30 @@ const toggleAbsent = (number) => {
           リセット
         </button>
 
-        {selectedDay !== null && (
-          <>
-            <button className={styles.reasonButton} onClick={() => setIsReasonFormVisible(true)}>
-              欠席理由を入力
-            </button>
-
-            {isReasonFormVisible && (
-              <div className={styles.reasonForm}>
-                <input
-                  type="text"
-                  value={reasonInput}
-                  onChange={(e) => setReasonInput(e.target.value)}
-                  placeholder={`${selectedDay}日の理由を入力`}
-                  className={styles.reasonInput}
-                />
-                <button onClick={saveReason} className={styles.saveButton}>
-                  保存
-                </button>
-              </div>
-            )}
-          </>
-        )}
+        <button
+          className={styles.reasonButton}
+          onClick={() => setIsReasonFormVisible(true)}
+          disabled={selectedDay === null}
+          title={selectedDay === null ? '日付を選択してください' : `${selectedDay}日の理由を入力`}
+        >
+          欠席理由を入力
+        </button>
       </div>
+
+      {isReasonFormVisible && selectedDay !== null && (
+        <div className={styles.reasonForm} style={{ marginTop: '10px' }}>
+          <input
+            type="text"
+            value={reasonInput}
+            onChange={(e) => setReasonInput(e.target.value)}
+            placeholder={`${selectedDay}日の理由を入力`}
+            className={styles.reasonInput}
+          />
+          <button onClick={saveReason} className={styles.saveButton}>
+            保存
+          </button>
+        </div>
+      )}
     </div>
   );
 }
-
