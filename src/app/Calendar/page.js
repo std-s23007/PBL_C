@@ -1,38 +1,58 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import styles from './page.module.css';
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { auth } from "../../firebase";
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import styles from "./page.module.css";
 
 export default function AttendanceCalendar() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // 先にすべてのuseState/useEffectを呼び出す
+  // ログインユーザー情報
+  const [user, setUser] = useState(null);
+
+  // カレンダーの年月・欠席日管理
   const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null); // JSの月は0始まり
+  const [month, setMonth] = useState(null);
   const [absentDays, setAbsentDays] = useState(new Set());
 
+  // 認証状態監視＋年月取得
   useEffect(() => {
+    // Firebase Auth ユーザー監視
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push("/");
+      }
+    });
+
+    // URLクエリから年月取得
     const y = parseInt(searchParams.get("year") || "");
     const m = parseInt(searchParams.get("month") || "");
-
     if (!isNaN(y) && !isNaN(m)) {
       setYear(y);
-      setMonth(m - 1); // JSの月は0始まり
+      setMonth(m - 1);
     } else {
       const today = new Date();
       setYear(today.getFullYear());
       setMonth(today.getMonth());
     }
-  }, [searchParams]);
 
-  // 年月がまだ決まっていない間は表示せず return する
-  if (year === null || month === null) {
-    return <div>読み込み中...</div>;
-  }
+    return () => unsubscribe();
+  }, [router, searchParams]);
 
-  // 以下のロジックは変わらずOK
+  // ログアウト関数
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/");
+  };
+
+  if (!user || year === null || month === null) return <div>読み込み中...</div>;
+
+  // 出席率計算・カレンダー描画は元コード通り
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayWeekday = new Date(year, month, 1).getDay();
 
@@ -78,6 +98,15 @@ export default function AttendanceCalendar() {
 
   return (
     <div className={styles.container}>
+      <header style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+        <div>
+          <strong>ログイン中:</strong> {user.email}
+        </div>
+        <button className={styles.logoutButton} onClick={handleLogout}>
+          ログアウト
+        </button>
+      </header>
+
       <h2>{month + 1}月 出席記録</h2>
 
       <table className={styles.table}>
@@ -121,7 +150,7 @@ export default function AttendanceCalendar() {
         出席率: {attendanceRate.toFixed(1)}%
       </div>
 
-      <button className={styles.backButton} onClick={() => router.push('/')}>
+      <button className={styles.backButton} onClick={() => router.push("/")}>
         戻る
       </button>
 
@@ -129,7 +158,7 @@ export default function AttendanceCalendar() {
         リセット
       </button>
 
-      <button className={styles.reasonButton} onClick={() => router.push('/Reason')}>
+      <button className={styles.reasonButton} onClick={() => router.push("/Reason")}>
         欠席理由
       </button>
     </div>
