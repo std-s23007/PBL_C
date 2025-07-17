@@ -24,16 +24,6 @@
   margin-bottom: 20px;
 }
 
-.backButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  background-color: #1976d2;
-  color: white;
-  cursor: pointer;
-}
-
 .resetButton {
   padding: 10px 20px;
   font-size: 16px;
@@ -45,15 +35,23 @@
   cursor: pointer;
 }
 
+.resetButton:hover {
+  background-color: #82c082;
+}
+
 .reasonButton {
   padding: 10px 20px;
   font-size: 16px;
   margin-left: 10px;
-  background-color: #c0392b; /* ログイン画面の青 */
+  background-color: #e74c3c; /* ログイン画面の青 */
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.reasonButton:hover {
+  background-color: #c0392b;
 }
 
 .logoutButton {

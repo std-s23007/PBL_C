@@ -150,10 +150,6 @@ export default function AttendanceCalendar() {
         出席率: {attendanceRate.toFixed(1)}%
       </div>
 
-      <button className={styles.backButton} onClick={() => router.push("/")}>
-        戻る
-      </button>
-
       <button className={styles.resetButton} onClick={resetAbsentDays}>
         リセット
       </button>
