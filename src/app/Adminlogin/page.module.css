@@ -34,3 +34,7 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.button:hover {
+  background-color: #1d4ed8;
+}
