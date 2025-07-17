@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import styles from "./page.module.css";
+
 export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [name, setName] = useState("");
@@ -14,7 +16,7 @@ export default function Home() {
   };
   return (
     <main className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">欠席理由</h1>
+      <h1>欠席理由</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="text"
@@ -30,14 +32,13 @@ export default function Home() {
           className="border p-2 w-full"
         />
         <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className={styles.myButton}
         >
           送信
         </button>
       </form>
       <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">投稿一覧</h2>
+        <h5>投稿一覧</h5>
         {reviews.map((r, index) => (
           <div key={index} className="border-b py-2">
             <p className="font-bold">{r.name}</p>
