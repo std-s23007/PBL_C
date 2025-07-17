@@ -1,15 +1,10 @@
-// app/page.tsx
 "use client";
 import { useState } from "react";
-type Review = {
-  name: string;
-  comment: string;
-};
 export default function Home() {
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (name && comment) {
       setReviews([...reviews, { name, comment }]);
