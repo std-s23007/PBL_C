@@ -64,8 +64,8 @@ export default function Home() {
         const doc = querySnapshot.docs[0];
         setName(doc.data().氏名);
         setMessage("ログイン成功！");
-        // ログイン後の処理（画面遷移など）
-        router.push('/Calender');
+        // ログイン後の処理
+        router.push('/Calender?year=${year}&month=${month}'); // カレンダーページへ遷移
       }
     } catch (error) {
       setMessage("ログイン処理中にエラーが発生しました");
