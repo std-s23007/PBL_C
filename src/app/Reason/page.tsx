@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   return (
-    <main className="max-w-xl mx-auto p-4">
+    <main className={styles.container}>
       <h1 className="text-2xl font-bold mb-4">欠席理由</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
