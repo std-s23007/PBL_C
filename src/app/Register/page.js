@@ -116,8 +116,7 @@ export default function Register() {
       <div className={styles.buttonGroup}>
         <button className={styles.button} onClick={handleRegister}>新規登録</button>
         <button
-          className={styles.button}
-          style={{ backgroundColor: '#888' }}
+          className={styles.backButton}
           onClick={() => router.push('/')}
         >
           戻る
