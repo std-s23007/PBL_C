@@ -66,3 +66,7 @@
   color: white;
   cursor: pointer;
 }
+
+.backButton:hover {
+  background-color: #666;
+}
