@@ -33,13 +33,13 @@ export default function Home() {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="border p-2 w-full"
+          className={styles.formGroup}
         />
         <textarea
           placeholder="欠席理由"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          className="border p-2 w-full"
+          className={styles.formGroup}
         />
         <button
           type="submit"

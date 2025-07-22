@@ -9,12 +9,12 @@
   background-color: #fdfdfd;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: 'Segoe UI', sans-serif;
+  text-align: center;
 }
 
 .title {
   font-size: 32px;
   font-weight: bold;
-  text-align: center;
   margin-bottom: 30px;
   color: #333;
   /* クリック隠しボタンの親にするならposition relativeしてもOK */
@@ -22,16 +22,23 @@
   /* display: inline-block; */
 }
 
+.formGroup {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
 .heading {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 }
 
 .input,
@@ -53,7 +60,7 @@
 }
 
 .button:hover {
-  background-color: #1d4ed8;
+    background-color: #155fa0;
 }
 
 .cancelbutton {
