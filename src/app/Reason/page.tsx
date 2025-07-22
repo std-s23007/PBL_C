@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <main className={styles.container}>
-      <h1 className="text-2xl font-bold mb-4">欠席理由</h1>
+      <h1 className={styles.title}>欠席理由</h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="date"
@@ -55,7 +55,7 @@ export default function Home() {
         </button>
       </form>
       <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-2">投稿一覧</h2>
+        <h2 className={styles.title}>投稿一覧</h2>
         {reviews.map((r, index) => (
           <div key={index} className="border-b py-2">
             <p className="font-bold">
