@@ -103,7 +103,10 @@ export default function Reason() {
           onChange={(e) => setComment(e.target.value)}
           className={styles.formGroup}
         />
-        <button type="submit" className={styles.button}>
+        <button 
+        type="submit" 
+        className={styles.button}
+        onClick={() => router.push("/Calendar")}>
           登録
         </button>
         <button
