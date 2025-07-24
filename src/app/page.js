@@ -21,6 +21,16 @@ export default function LoginPage() {
     }
   };
 
+   const handleHiddenClick = () => {
+    setAdminClickCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= 5) {
+        router.push("/Adminlogin");
+      }
+      return newCount;
+    });
+  };
+
   useEffect(() => {
     const today = new Date();
     const formatted = today.toLocaleDateString("ja-JP");
@@ -37,6 +47,12 @@ export default function LoginPage() {
       {/* ログインテキストを囲むrelative親要素 */}
       <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
         <h1 className={styles.title}>ログイン</h1>
+      
+      <div
+          onClick={handleHiddenClick}
+          className={styles.hiddenButton}
+          aria-hidden="true"
+        />
       </div>
 
       <div className={styles.formGroup}>
