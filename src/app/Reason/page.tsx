@@ -36,7 +36,7 @@ export default function Reason() {
         setUser(currentUser);
         setLoading(false);
       } else {
-        router.push("/login");
+        router.push("/");
       }
     });
     return () => unsubscribe();
