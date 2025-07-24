@@ -29,12 +29,6 @@
   gap: 0.5rem;
 }
 
-.formGroup label {
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #555;
-}
-
 .heading {
   font-size: 1.5rem;
   font-weight: bold;
