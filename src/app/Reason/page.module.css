@@ -1,70 +1,46 @@
-/* app/page.module.css */
-
 .container {
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #fdfdfd;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', sans-serif;
-  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: sans-serif;
 }
 
 .title {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 30px;
-  color: #333;
-  /* クリック隠しボタンの親にするならposition relativeしてもOK */
-  /* position: relative; */
-  /* display: inline-block; */
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .formGroup {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.formGroup label {
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: #555;
-}
-
-.heading {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.input,
-.textarea {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
   width: 100%;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .button {
-  background-color: #1976d2; 
+  background-color: #0070f3;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
   border: none;
+  border-radius: 8px;
+  font-size: 16px;
   cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s;
 }
 
 .button:hover {
-    background-color: #155fa0;
+  background-color: #005dc1;
 }
 
-.cancelbutton {
-  background-color: #888;
+.deletebutton {
+  margin-left: 20px;
+  background-color: #d32f2f;
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
@@ -73,25 +49,43 @@
   transition: background-color 0.2s ease;
 }
 
+.cancelbutton {
+  background-color: #ccc;
+  color: #333;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 .cancelbutton:hover {
-  background-color: #666;
+  background-color: #aaa;
 }
 
 .reviewSection {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
 .reviewTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
 }
 
 .reviewItem {
-  border-bottom: 1px solid #ccc;
-  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 0;
 }
 
-.reviewName {
-  font-weight: bold;
+.reviewDate {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 0.25rem;
 }
