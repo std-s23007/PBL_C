@@ -32,28 +32,11 @@ export default function LoginPage() {
     return () => unsubscribe();
   }, [router]);
 
-  const handleHiddenClick = () => {
-    setAdminClickCount((prev) => {
-      const newCount = prev + 1;
-      if (newCount >= 5) {
-        router.push("/Adminlogin");
-      }
-      return newCount;
-    });
-  };
-
   return (
     <main className={styles.container}>
       {/* ログインテキストを囲むrelative親要素 */}
       <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
         <h1 className={styles.title}>ログイン</h1>
-
-        {/* 透明の隠しクリック用ボタン */}
-        <div
-          onClick={handleHiddenClick}
-          className={styles.hiddenButton}
-          aria-hidden="true"
-        />
       </div>
 
       <div className={styles.formGroup}>
