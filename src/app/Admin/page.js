@@ -1,91 +1,92 @@
-'use client';
+"use client";
 
-import styles from './page.module.css';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { initializeApp, getApps } from "firebase/app";
-import { useRouter } from 'next/navigation';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDug6k408E81owFyQNA98YjikBAqGlE7mM",
-  authDomain: "pbl-c-54088.firebaseapp.com",
-  projectId: "pbl-c-54088",
-  storageBucket: "pbl-c-54088.appspot.com",
-  messagingSenderId: "44768519903",
-  appId: "1:44768519903:web:6b8a002e5981bb1300ab6a",
-  measurementId: "G-D8B3QJG0G9"
-};
-
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { db } from "../../firebase"; // ←firebase設定ファイルに合わせて調整
+import styles from "./page.module.css";
 
 export default function AdminPage() {
-  const router = useRouter();  // ←ここを追加
-
+  const router = useRouter();
   const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [userEmail, setUserEmail] = useState(null); // 追加: ユーザーのメールを保持
 
-  // データ取得
   const fetchStudents = async () => {
-    setLoading(true);
-    const querySnapshot = await getDocs(collection(db, "students"));
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setStudents(data);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  // 削除処理
-  const handleDelete = async (id) => {
-    if (!confirm("本当に削除しますか？")) return;
     try {
-      await deleteDoc(doc(db, "students", id));
-      alert("削除しました");
-      fetchStudents();  // 再読み込み
-    } catch (e) {
-      alert("削除エラー：" + e.message);
+      const querySnapshot = await getDocs(collection(db, "students"));
+      const studentsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setStudents(studentsData);
+    } catch (error) {
+      console.error("データ取得エラー:", error);
     }
   };
 
-  if (loading) return <p className={styles.message}>読み込み中...</p>;
+  useEffect(() => {
+    const isAdmin = localStorage.getItem("isAdmin");
+    if (isAdmin !== "true") {
+      router.push("/"); // 未認証ならトップへ
+    } else {
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUserEmail(user.email); // メールを保存
+        }
+      });
+      fetchStudents();
+      setAuthLoading(false);
+      return () => unsubscribe(); // クリーンアップ
+    }
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteDoc(doc(db, "students", id));
+      setStudents((prev) => prev.filter((student) => student.id !== id));
+    } catch (error) {
+      console.error("削除エラー:", error);
+    }
+  };
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth); // Firebaseからサインアウト
+    } catch (error) {
+      console.error("Firebaseログアウトエラー:", error);
+    }
+    localStorage.removeItem("isAdmin");
+    router.push("/");
+  };
+
+  if (authLoading) {
+    return <p>読み込み中...</p>;
+  }
 
   return (
     <main className={styles.container}>
-      <h1 className={styles.title}>管理者画面</h1>
-      {students.length === 0 ? (
-        <p className={styles.message}>登録データなし</p>
-      ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.th}>学籍番号</th>
-              <th className={styles.th}>氏名</th>
-              <th className={styles.th}>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map(student => (
-              <tr key={student.id} className={styles.row}>
-                <td className={styles.td}>{student.学籍番号}</td>
-                <td className={styles.td}>{student.氏名}</td>
-                <td className={styles.td}>
-                  <button className={styles.deletebutton} onClick={() => handleDelete(student.id)}>
-                    削除
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      <button className={styles.backButton} onClick={() => 
-      {alert('ログイン画面へ戻ります');
-      router.push('/')}}>
-          戻る
+      <h1 className={styles.title}>管理者ページ</h1>
+
+      {userEmail && <p>ログイン中: {userEmail}</p>}
+
+      <button onClick={handleLogout} className={styles.button}>
+        ログアウト
       </button>
+
+      <ul className={styles.list}>
+        {students.map((student) => (
+          <li key={student.id} className={styles.listItem}>
+            <span>{student.name}</span>
+            <button onClick={() => handleDelete(student.id)} className={styles.deleteButton}>
+              削除
+            </button>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }
