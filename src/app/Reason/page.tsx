@@ -9,6 +9,7 @@ import {
   addDoc,
   query,
   where,
+  orderBy, // ← 追加
   getDocs,
   deleteDoc,
   doc,
@@ -42,14 +43,15 @@ export default function Reason() {
     return () => unsubscribe();
   }, [router]);
 
-  // Firestore からログインユーザーの投稿を取得
+  // Firestore からログインユーザーの投稿を取得（最新順にする）
   useEffect(() => {
     if (!user) return;
 
     async function fetchReviews() {
       const q = query(
         collection(db, "reviews"),
-        where("userId", "==", user.uid)
+        where("userId", "==", user.uid),
+        orderBy("date", "desc") // ← 最新の投稿が上に来るように並び替え
       );
       const querySnapshot = await getDocs(q);
       const userReviews = querySnapshot.docs.map((doc) => ({
@@ -72,7 +74,7 @@ export default function Reason() {
         date,
         userId: user.uid,
       });
-      setReviews([...reviews, { id: docRef.id, comment, date, userId: user.uid }]);
+      setReviews([{ id: docRef.id, comment, date, userId: user.uid }, ...reviews]);
       setComment("");
       setDate("");
     }
@@ -104,9 +106,10 @@ export default function Reason() {
           className={styles.formGroup}
         />
         <button 
-        type="submit" 
-        className={styles.button}
-        onClick={() => router.push("/Calendar")}>
+          type="submit" 
+          className={styles.button}
+          onClick={() => router.push("/Calendar")}
+        >
           登録
         </button>
         <button
