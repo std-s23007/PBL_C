@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, deleteDoc } from "firebase/firestore";
 import styles from "./page.module.css";
 
 export default function AttendanceCalendar() {
@@ -108,7 +108,30 @@ export default function AttendanceCalendar() {
     setAbsentDays(newSet);
   };
 
-  const resetAbsentDays = () => setAbsentDays(new Set());
+  const resetAbsentDays = async () => {
+    if (!user || year === null || month === null) {
+      setAbsentDays(new Set());
+      return;
+    }
+    // Firestoreから該当月の欠席データを取得
+    const monthStr = (month + 1).toString().padStart(2, "0");
+    const yearStr = year.toString();
+    const q = query(
+      collection(db, "reviews"),
+      where("userId", "==", user.uid)
+    );
+    const querySnapshot = await getDocs(q);
+    // 該当月のデータのみ削除
+    const batchDeletes = [];
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.date && data.date.startsWith(`${yearStr}-${monthStr}`)) {
+        batchDeletes.push(deleteDoc(docSnap.ref));
+      }
+    });
+    await Promise.all(batchDeletes);
+    setAbsentDays(new Set());
+  };
 
   const validAbsentDays = Array.from(absentDays).filter((day) => {
     const date = new Date(year, month, day);
