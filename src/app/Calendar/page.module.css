@@ -1,70 +1,244 @@
+.background {
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 .container {
-  max-width: 400px;
-  margin: 40px auto;
-  font-family: sans-serif;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.userInfo {
+  font-size: 14px;
+  color: #555;
+}
+
+.userInfo p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.userInfo strong {
+    font-size: 16px;
+    color: #111;
+}
+
+.logoutButton {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: #d32f2f;
+}
+
+.calendarCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   text-align: center;
 }
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.calendarHeader h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.navButton:hover {
+  color: #333;
+}
+
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.table th {
+    padding-bottom: 15px;
+    font-weight: 500;
+    color: #888;
+    font-size: 14px;
 }
 
 .dayCell {
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 0;
   width: 14.28%;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
   cursor: pointer;
   user-select: none;
+  font-size: 16px;
+  transition: background-color 0.2s, color 0.2s;
+  position: relative;
+}
+
+.weekday {
+    background-color: #e8f5e9; /* 出席の薄い緑 */
+    color: #388e3c;
+}
+
+.weekday:hover {
+    background-color: #dceddc;
+}
+
+.absent {
+    background-color: #ffcdd2; /* 欠席の薄い赤 */
+    color: #c62828;
+    font-weight: bold;
+}
+
+.weekend {
+  background-color: #f5f5f5;
+  color: #aaa;
+  cursor: default;
+}
+
+.today::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #1976d2;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 0 10px;
 }
 
 .rate {
   font-size: 18px;
-  margin-bottom: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.rate strong {
+    font-size: 20px;
+    color: #007bff;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.legendItem {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-left: 15px;
+}
+
+.present {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+}
+
+.absentLegend {
+    background-color: #ffcdd2;
+    border: 1px solid #ef9a9a;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .resetButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-left: 10px;
-  background-color:#99dd99; /* リセットボタンの緑 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #78909c;
 }
 
 .resetButton:hover {
-  background-color: #82c082;
+  background-color: #607d8b;
 }
 
 .reasonButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-left: 10px;
-  background-color: #e74c3c; /* 欠席理由画面の赤 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #ef5350;
 }
 
 .reasonButton:hover {
-  background-color: #c0392b;
+  background-color: #e53935;
 }
 
-.logoutButton {
-  padding: 5px 10px;
-  font-size: 13px;
-  margin-left: 10px;
-  background-color: #888; /* ログアウト画面のグレー */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.saveButton {
+  background-color: #42a5f5;
 }
 
-.logoutButton:hover {
-  background-color: #666;
+.saveButton:hover {
+  background-color: #1e88e5;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #888;
 }

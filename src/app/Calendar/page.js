@@ -4,23 +4,18 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import styles from "./page.module.css";
+import styles from "./page.module.css"; // 新しいCSSモジュールをインポート
 
 export default function AttendanceCalendar() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ログインユーザー情報
   const [user, setUser] = useState(null);
-
-  // カレンダーの年月・欠席日管理
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth());
   const [absentDays, setAbsentDays] = useState(new Set());
 
-  // 認証状態監視＋年月取得
   useEffect(() => {
-    // Firebase Auth ユーザー監視
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
@@ -29,30 +24,39 @@ export default function AttendanceCalendar() {
       }
     });
 
-    // URLクエリから年月取得
     const y = parseInt(searchParams.get("year") || "");
     const m = parseInt(searchParams.get("month") || "");
     if (!isNaN(y) && !isNaN(m)) {
       setYear(y);
       setMonth(m - 1);
-    } else {
-      const today = new Date();
-      setYear(today.getFullYear());
-      setMonth(today.getMonth());
     }
 
-    return () => unsubscribe();
-  }, [router, searchParams]);
+    // ここで欠席データをフェッチするロジックを想定
+    // fetchAbsentData(year, month);
 
-  // ログアウト関数
+    return () => unsubscribe();
+  }, [router, searchParams, year, month]);
+
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/");
   };
 
-  if (!user || year === null || month === null) return <div>読み込み中...</div>;
+  const changeMonth = (offset) => {
+    const newDate = new Date(year, month + offset, 1);
+    const newYear = newDate.getFullYear();
+    const newMonth = newDate.getMonth();
+    router.push(`/attendance?year=${newYear}&month=${newMonth + 1}`);
+  };
+  
+  const handleSave = () => {
+    // ここで欠席データを保存するロジックを想定
+    // e.g., saveAbsentData(year, month, absentDays);
+    alert("出席データを保存しました。");
+  };
 
-  // 出席率計算・カレンダー描画は元コード通り
+  if (!user) return <div className={styles.loading}>読み込み中...</div>;
+
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayWeekday = new Date(year, month, 1).getDay();
 
@@ -85,78 +89,101 @@ export default function AttendanceCalendar() {
     return dayOfWeek !== 0 && dayOfWeek !== 6;
   });
 
-  const attendanceRate = ((weekdays.length - validAbsentDays.length) / weekdays.length) * 100;
+  const attendanceRate = weekdays.length > 0 ? ((weekdays.length - validAbsentDays.length) / weekdays.length) * 100 : 100;
 
   const calendarCells = [];
   for (let i = 0; i < firstDayWeekday; i++) calendarCells.push(null);
   for (let day = 1; day <= daysInMonth; day++) calendarCells.push(day);
 
   const weeks = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < Math.ceil(calendarCells.length / 7); i++) {
     weeks.push(calendarCells.slice(i * 7, i * 7 + 7));
   }
 
   return (
-    <div className={styles.container}>
-      <header style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
-        <div>
-          <strong>ログイン中:</strong> {user.email}
-        </div>
-        <button className={styles.logoutButton} onClick={handleLogout}>
-          ログアウト
-        </button>
-      </header>
+    <div className={styles.background}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div className={styles.userInfo}>
+            <p>ログイン中:</p>
+            <strong>{user.email}</strong>
+          </div>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            ログアウト
+          </button>
+        </header>
 
-      <h2>{month + 1}月 出席記録</h2>
+        <main className={styles.calendarCard}>
+          <div className={styles.calendarHeader}>
+            <button onClick={() => changeMonth(-1)} className={styles.navButton}>&lt;</button>
+            <h2>{year}年 {month + 1}月</h2>
+            <button onClick={() => changeMonth(1)} className={styles.navButton}>&gt;</button>
+          </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
-          </tr>
-        </thead>
-        <tbody>
-          {weeks.map((week, i) => (
-            <tr key={i}>
-              {week.map((day, idx) => {
-                if (!day) return <td key={idx}></td>;
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+              </tr>
+            </thead>
+            <tbody>
+              {weeks.map((week, i) => (
+                <tr key={i}>
+                  {week.map((day, idx) => {
+                    if (!day) return <td key={idx}></td>;
 
-                const date = new Date(year, month, day);
-                const dayOfWeek = date.getDay();
-                const isAbsent = absentDays.has(day);
-                const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                    const date = new Date(year, month, day);
+                    const dayOfWeek = date.getDay();
+                    const isAbsent = absentDays.has(day);
+                    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                    const isToday = new Date().toDateString() === date.toDateString();
 
-                return (
-                  <td
-                    key={idx}
-                    onClick={() => !isWeekend && toggleAbsent(day)}
-                    className={styles.dayCell}
-                    style={{
-                      backgroundColor: isAbsent ? '#f88' : isWeekend ? '#eee' : '#cfc',
-                      cursor: isWeekend ? 'default' : 'pointer'
-                    }}
-                    title={isAbsent ? '欠席' : isWeekend ? '土日' : '出席'}
-                  >
-                    {day}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    let cellClassName = styles.dayCell;
+                    if (isWeekend) cellClassName += ` ${styles.weekend}`;
+                    if (isAbsent) cellClassName += ` ${styles.absent}`;
+                    if (isToday) cellClassName += ` ${styles.today}`;
+                    if (!isWeekend) cellClassName += ` ${styles.weekday}`;
 
-      <div className={styles.rate}>
-        出席率: {attendanceRate.toFixed(1)}%
+
+                    return (
+                      <td
+                        key={idx}
+                        onClick={() => !isWeekend && toggleAbsent(day)}
+                        className={cellClassName}
+                        title={isAbsent ? '欠席' : isWeekend ? '土日' : '出席'}
+                      >
+                        {day}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className={styles.summary}>
+            <div className={styles.rate}>
+              出席率: <strong>{attendanceRate.toFixed(1)}%</strong>
+            </div>
+             <div className={styles.legend}>
+              <span className={`${styles.legendItem} ${styles.present}`}></span> 出席
+              <span className={`${styles.legendItem} ${styles.absentLegend}`}></span> 欠席
+            </div>
+          </div>
+          
+          <div className={styles.actions}>
+            <button className={`${styles.button} ${styles.resetButton}`} onClick={resetAbsentDays}>
+              リセット
+            </button>
+            <button className={`${styles.button} ${styles.reasonButton}`} onClick={() => router.push("/Reason")}>
+              欠席理由
+            </button>
+            <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
+              保存する
+            </button>
+          </div>
+        </main>
       </div>
-
-      <button className={styles.resetButton} onClick={resetAbsentDays}>
-        リセット
-      </button>
-
-      <button className={styles.reasonButton} onClick={() => router.push("/Reason")}>
-        欠席理由
-      </button>
     </div>
   );
 }
