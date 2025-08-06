@@ -1,70 +1,150 @@
+/* page.module.css */
+
 .container {
-  max-width: 400px;
+  max-width: 420px;
   margin: 40px auto;
-  font-family: sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
+  background: #f9f9f9;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 6px 8px;
   margin-bottom: 20px;
-}
-
-.dayCell {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 14.28%;
-  cursor: pointer;
   user-select: none;
 }
 
-.rate {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
-.resetButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-left: 10px;
-  background-color:#99dd99; /* リセットボタンの緑 */
-  color: white;
-  border: none;
-  border-radius: 5px;
+.dayCell {
+  background-color: #d0f0c0;
+  border-radius: 8px;
+  padding: 12px 0;
   cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+  color: #2e7d32;
+  box-shadow: 0 1px 3px rgba(46,125,50,0.2);
 }
 
+.dayCellHover:hover {
+  background-color: #a3d79a;
+}
+
+.absent {
+  background-color: #f8c1c1;
+  color: #b71c1c;
+  box-shadow: 0 1px 6px rgba(183,28,28,0.3);
+}
+
+.weekend {
+  background-color: #eee;
+  color: #999;
+  cursor: default;
+  box-shadow: none;
+}
+
+.tableHeader {
+  font-weight: 700;
+  padding-bottom: 10px;
+  color: #555;
+}
+
+.rate {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #2e7d32;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 25px;
+}
+
+/* ボタン基本スタイル */
+.buttonBase {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: background-color 0.25s ease;
+}
+
+/* 個別ボタンカラー */
+.resetButton {
+  background-color: #4caf50;
+}
 .resetButton:hover {
-  background-color: #82c082;
+  background-color: #388e3c;
 }
 
 .reasonButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-left: 10px;
-  background-color: #e74c3c; /* 欠席理由画面の赤 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #e53935;
 }
-
 .reasonButton:hover {
-  background-color: #c0392b;
+  background-color: #b71c1c;
 }
 
 .logoutButton {
-  padding: 5px 10px;
+  background-color: #757575;
+  padding: 8px 16px;
   font-size: 13px;
-  margin-left: 10px;
-  background-color: #888; /* ログアウト画面のグレー */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 16px;
+}
+.logoutButton:hover {
+  background-color: #424242;
 }
 
-.logoutButton:hover {
-  background-color: #666;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.monthSwitch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.monthSwitchButton {
+  background-color: #1976d2;
+  padding: 10px 18px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+.monthSwitchButton:hover {
+  background-color: #0d47a1;
+}
+
+.monthTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1976d2;
+}
+
+.absentList {
+  font-size: 15px;
+  color: #444;
+  margin-top: 10px;
+  min-height: 26px;
 }
