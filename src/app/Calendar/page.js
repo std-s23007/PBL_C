@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import styles from "./page.module.css";
 
 export default function AttendanceCalendar() {
@@ -17,6 +18,8 @@ export default function AttendanceCalendar() {
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
   const [absentDays, setAbsentDays] = useState(new Set());
+  // Firestore用
+  const [loadingAbsent, setLoadingAbsent] = useState(false);
 
   // 認証状態監視＋年月取得
   useEffect(() => {
@@ -44,6 +47,33 @@ export default function AttendanceCalendar() {
     return () => unsubscribe();
   }, [router, searchParams]);
 
+  // Firestoreから欠席日取得
+  useEffect(() => {
+    async function fetchAbsentDays() {
+      if (!user || year === null || month === null) return;
+      setLoadingAbsent(true);
+      const monthStr = (month + 1).toString().padStart(2, "0");
+      const yearStr = year.toString();
+      const q = query(
+        collection(db, "reviews"),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const days = new Set();
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        // date: "2025-08-06" の形式を想定
+        if (data.date && data.date.startsWith(`${yearStr}-${monthStr}`)) {
+          const day = parseInt(data.date.split("-")[2]);
+          if (!isNaN(day)) days.add(day);
+        }
+      });
+      setAbsentDays(days);
+      setLoadingAbsent(false);
+    }
+    fetchAbsentDays();
+  }, [user, year, month]);
+
   // ログアウト関数
   const handleLogout = async () => {
     await signOut(auth);
@@ -51,6 +81,7 @@ export default function AttendanceCalendar() {
   };
 
   if (!user || year === null || month === null) return <div>読み込み中...</div>;
+  if (loadingAbsent) return <div>欠席情報を取得中...</div>;
 
   // 出席率計算・カレンダー描画は元コード通り
   const daysInMonth = new Date(year, month + 1, 0).getDate();
