@@ -44,9 +44,9 @@ export default function Reason() {
 
   // Firestore からログインユーザーの投稿を取得
   useEffect(() => {
-    if (!user) return;
-
     async function fetchReviews() {
+      if (!user) return;
+      
       const q = query(
         collection(db, "reviews"),
         where("userId", "==", user.uid)
