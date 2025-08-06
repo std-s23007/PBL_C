@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, deleteDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, deleteDoc } from "firebase/firestore";
 import styles from "./page.module.css";
 
 export default function AttendanceCalendar() {
@@ -18,8 +18,6 @@ export default function AttendanceCalendar() {
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
   const [absentDays, setAbsentDays] = useState(new Set());
-  // Firestore用
-  const [loadingAbsent, setLoadingAbsent] = useState(false);
 
   // 認証状態監視＋年月取得
   useEffect(() => {
@@ -47,11 +45,10 @@ export default function AttendanceCalendar() {
     return () => unsubscribe();
   }, [router, searchParams]);
 
-  // Firestoreから欠席日取得
+  // 欠席日をreviewsコレクションから取得
   useEffect(() => {
     async function fetchAbsentDays() {
       if (!user || year === null || month === null) return;
-      setLoadingAbsent(true);
       const monthStr = (month + 1).toString().padStart(2, "0");
       const yearStr = year.toString();
       const q = query(
@@ -62,14 +59,12 @@ export default function AttendanceCalendar() {
       const days = new Set();
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        // date: "2025-08-06" の形式を想定
         if (data.date && data.date.startsWith(`${yearStr}-${monthStr}`)) {
           const day = parseInt(data.date.split("-")[2]);
           if (!isNaN(day)) days.add(day);
         }
       });
       setAbsentDays(days);
-      setLoadingAbsent(false);
     }
     fetchAbsentDays();
   }, [user, year, month]);
@@ -81,7 +76,6 @@ export default function AttendanceCalendar() {
   };
 
   if (!user || year === null || month === null) return <div>読み込み中...</div>;
-  if (loadingAbsent) return <div>欠席情報を取得中...</div>;
 
   // 出席率計算・カレンダー描画は元コード通り
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -94,26 +88,45 @@ export default function AttendanceCalendar() {
     if (dayOfWeek !== 0 && dayOfWeek !== 6) weekdays.push(day);
   }
 
-  const toggleAbsent = (day) => {
+  // 欠席日を追加・削除
+  const toggleAbsent = async (day) => {
     const date = new Date(year, month, day);
     const dayOfWeek = date.getDay();
     if (dayOfWeek === 0 || dayOfWeek === 6) return;
-
-    const newSet = new Set(absentDays);
-    if (newSet.has(day)) {
+    const monthStr = (month + 1).toString().padStart(2, "0");
+    const yearStr = year.toString();
+    const dateStr = `${yearStr}-${monthStr}-${String(day).padStart(2, "0")}`;
+    if (absentDays.has(day)) {
+      // reviewsから該当日データ削除
+      const q = query(
+        collection(db, "reviews"),
+        where("userId", "==", user.uid),
+        where("date", "==", dateStr)
+      );
+      const querySnapshot = await getDocs(q);
+      await Promise.all(querySnapshot.docs.map((docSnap) => deleteDoc(docSnap.ref)));
+      const newSet = new Set(absentDays);
       newSet.delete(day);
+      setAbsentDays(newSet);
     } else {
+      // reviewsに新規追加（理由は空文字）
+      await addDoc(collection(db, "reviews"), {
+        userId: user.uid,
+        date: dateStr,
+        comment: ""
+      });
+      const newSet = new Set(absentDays);
       newSet.add(day);
+      setAbsentDays(newSet);
     }
-    setAbsentDays(newSet);
   };
 
+  // 欠席日リセット
   const resetAbsentDays = async () => {
     if (!user || year === null || month === null) {
       setAbsentDays(new Set());
       return;
     }
-    // Firestoreから該当月の欠席データを取得
     const monthStr = (month + 1).toString().padStart(2, "0");
     const yearStr = year.toString();
     const q = query(
@@ -121,7 +134,6 @@ export default function AttendanceCalendar() {
       where("userId", "==", user.uid)
     );
     const querySnapshot = await getDocs(q);
-    // 該当月のデータのみ削除
     const batchDeletes = [];
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
