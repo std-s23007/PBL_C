@@ -109,11 +109,10 @@ export default function AttendanceCalendar() {
       newSet.delete(day);
       setAbsentDays(newSet);
     } else {
-      // reviewsに新規追加（理由は空文字）
+      // reviewsに新規追加
       await addDoc(collection(db, "reviews"), {
         userId: user.uid,
-        date: dateStr,
-        comment: ""
+        date: dateStr
       });
       const newSet = new Set(absentDays);
       newSet.add(day);
