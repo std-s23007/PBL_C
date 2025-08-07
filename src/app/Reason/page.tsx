@@ -1,98 +1,139 @@
 "use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { auth, db } from "../../firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 type Review = {
-  id: number;
+  id?: string;
   comment: string;
   date: string;
+  userId: string;
 };
 
-export default function ReasonPage() {
-  const router = useRouter();
-  const [comment, setComment] = useState("");
+export default function Reason() {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [comment, setComment] = useState("");
+  const [date, setDate] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ユーザー認証の確認
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setLoading(false);
+      } else {
+        router.push("/");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  // Firestore からログインユーザーの投稿を取得
+  useEffect(() => {
+    async function fetchReviews() {
+      if (!user) return;
+      
+      const q = query(
+        collection(db, "reviews"),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const userReviews = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Review, "id">),
+      }));
+      setReviews(userReviews);
+    }
+
+    fetchReviews();
+  }, [user]);
+
+  // 投稿を Firestore に追加
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!comment.trim()) return;
-
-    setLoading(true);
-    setTimeout(() => {
-      const newReview: Review = {
-        id: Date.now(),
+    if (!user) return;
+    if (comment && date) {
+      const docRef = await addDoc(collection(db, "reviews"), {
         comment,
-        date: new Date().toLocaleString(),
-      };
-      setReviews([newReview, ...reviews]);
+        date,
+        userId: user.uid,
+      });
+      setReviews([...reviews, { id: docRef.id, comment, date, userId: user.uid }]);
       setComment("");
-      setLoading(false);
-    }, 500);
+      setDate("");
+    }
   };
 
-  const handleDelete = (id: number) => {
+  // 投稿を削除
+  const handleDelete = async (id: string | undefined) => {
+    if (!id) return;
+    await deleteDoc(doc(db, "reviews", id));
     setReviews(reviews.filter((r) => r.id !== id));
   };
 
+  if (loading) return <div>読み込み中...</div>;
+
   return (
     <main className={styles.container}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>欠席理由</h1>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>コメント</label>
-            <textarea
-              className={styles.textarea}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.buttonGroup}>
+      <h1 className={styles.title}>欠席理由</h1>
+      <form onSubmit={handleSubmit} className="space-y-2">
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className={styles.formGroup}
+        />
+        <textarea
+          placeholder="欠席理由"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className={styles.formGroup}
+        />
+        <button 
+        type="submit" 
+        className={styles.button}
+        onClick={() => router.push("/Calendar")}>
+          登録
+        </button>
+        <button
+          type="button"
+          className={styles.cancelbutton}
+          onClick={() => router.push("/Calendar")}
+        >
+          キャンセル
+        </button>
+      </form>
+
+      <div className={styles.reviewSection}>
+        <h2 className={styles.reviewTitle}>あなたの投稿一覧</h2>
+        {reviews.map((r) => (
+          <div key={r.id} className={styles.reviewItem}>
+            <div>
+              <p className={styles.reviewDate}>{r.date}</p>
+              <p>{r.comment}</p>
+            </div>
             <button
-              type="submit"
-              className={`${styles.button} ${styles.submitButton}`}
-              disabled={loading}
+              className={styles.deletebutton}
+              onClick={() => handleDelete(r.id)}
             >
-              投稿
-            </button>
-            <button
-              type="button"
-              className={`${styles.button} ${styles.cancelButton}`}
-              onClick={() => router.back()}
-            >
-              キャンセル
+              削除
             </button>
           </div>
-        </form>
-        <div className={styles.reviewSection}>
-          <h2 className={styles.reviewTitle}>投稿一覧</h2>
-          {loading ? (
-            <div className={styles.loadingSpinner}></div>
-          ) : reviews.length === 0 ? (
-            <p className={styles.noReviewsText}>まだ投稿がありません</p>
-          ) : (
-            <ul className={styles.reviewList}>
-              {reviews.map((r) => (
-                <li key={r.id} className={styles.reviewItem}>
-                  <div className={styles.reviewContent}>
-                    <div className={styles.reviewDate}>{r.date}</div>
-                    <div className={styles.reviewComment}>{r.comment}</div>
-                  </div>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => handleDelete(r.id)}
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        ))}
       </div>
     </main>
   );
