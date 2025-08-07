@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import {collection, updateDoc, where, getDocs, deleteDoc, doc} from "firebase/firestore";
+import {collection, updateDoc, where, getDocs, doc, deleteField} from "firebase/firestore";
 import { query } from "firebase/firestore";
 
 type Review = {
@@ -86,12 +86,24 @@ export default function Reason() {
     }
   };
 
-  // 投稿を削除
+  // 投稿の「ドキュメント」ではなく「理由(comment)フィールド」を削除するように変更
   const handleDelete = async (id: string | undefined) => {
     if (!id) return;
-    await deleteDoc(doc(db, "reviews", id));
+
+    // 1. Firestoreのドキュメントへの参照を取得
+    const docRef = doc(db, "reviews", id);
+
+    // 2. updateDoc を使い、commentフィールドだけを削除する
+    await updateDoc(docRef, {
+      comment: deleteField(),
+    });
+
+    // 3. 画面に即時反映させるため、ローカルのstateからも理由を削除
     setReviews(reviews.filter((r) => r.id !== id));
+
+    alert("欠席理由を削除しました。");
   };
+
 
   if (loading) return <div>読み込み中...</div>;
 
