@@ -57,7 +57,6 @@ export default function Reason() {
   }, [user]);
 
    // 投稿を Firestore に「追加」ではなく「更新」するロジックに変更
-  // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !comment || !comment.trim() || !date.trim()) return;
@@ -86,7 +85,6 @@ export default function Reason() {
       router.push("/Calendar"); // カレンダーページに戻る
     }
   };
-  // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   // 投稿を削除
   const handleDelete = async (id: string | undefined) => {
@@ -132,7 +130,9 @@ export default function Reason() {
 
       <div className={styles.reviewSection}>
         <h2 className={styles.reviewTitle}>あなたの投稿一覧</h2>
-        {reviews.map((r) => (
+        {reviews
+        .filter((r) => r.comment && r.comment.trim() !== "")
+        .map((r) => (
           <div key={r.id} className={styles.reviewItem}>
             <div>
               <p className={styles.reviewDate}>{r.date}</p>
