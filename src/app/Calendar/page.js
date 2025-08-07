@@ -50,6 +50,13 @@ export default function AttendanceCalendar() {
     if (newSet.has(day)) {
       newSet.delete(day);
     } else {
+
+      // reviewsに新規追加
+      await addDoc(collection(db, "reviews"), {
+        userId: user.uid,
+        date: dateStr
+      });
+      const newSet = new Set(absentDays);
       newSet.add(day);
     }
     setAbsentDays(newSet);
