@@ -168,7 +168,7 @@ export default function AttendanceCalendar() {
         <div>
           <strong>ログイン中:</strong> {user.email}
         </div>
-        <button className={styles.logoutButton} onClick={handleLogout}>
+        <button className={`${styles.buttonBase} ${styles.logoutButton}`} onClick={handleLogout}>
           ログアウト
         </button>
       </header>
@@ -216,11 +216,11 @@ export default function AttendanceCalendar() {
         出席率: {attendanceRate.toFixed(1)}%
       </div>
 
-      <button className={styles.resetButton} onClick={resetAbsentDays}>
+      <button className={`${styles.buttonBase} ${styles.resetButton}`} onClick={resetAbsentDays}>
         リセット
       </button>
 
-      <button className={styles.reasonButton} onClick={() => router.push("/Reason")}>
+      <button className={`${styles.buttonBase} ${styles.reasonButton}`} onClick={() => router.push("/Reason")}>
         欠席理由
       </button>
     </div>
