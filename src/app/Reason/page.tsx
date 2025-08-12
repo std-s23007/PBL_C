@@ -13,7 +13,6 @@ type Review = {
   date: string;
   userId: string;
 };
-
 export default function Reason() {
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -21,7 +20,7 @@ export default function Reason() {
   const [date, setDate] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  
+  const router = useRouter();
 
   // ユーザー認証の確認
   useEffect(() => {
@@ -35,12 +34,11 @@ export default function Reason() {
     });
     return () => unsubscribe();
   }, [router]);
-
   // Firestore からログインユーザーの投稿を取得
   useEffect(() => {
+    if (!user) return;
     async function fetchReviews() {
       if (!user) return;
-      
       const q = query(
         collection(db, "reviews"),
         where("userId", "==", user.uid)
@@ -52,7 +50,6 @@ export default function Reason() {
       }));
       setReviews(userReviews);
     }
-
     fetchReviews();
   }, [user]);
 
@@ -104,9 +101,7 @@ export default function Reason() {
     alert("欠席理由を削除しました。");
   };
 
-
   if (loading) return <div>読み込み中...</div>;
-
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>欠席理由</h1>
@@ -125,8 +120,8 @@ export default function Reason() {
           className={styles.formGroup}
           required
         />
-        <button 
-        type="submit" 
+        <button
+        type="submit"
         className={styles.button}
         >
           登録
@@ -139,7 +134,6 @@ export default function Reason() {
           キャンセル
         </button>
       </form>
-
       <div className={styles.reviewSection}>
         <h2 className={styles.reviewTitle}>あなたの投稿一覧</h2>
         {reviews
