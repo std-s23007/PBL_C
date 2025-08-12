@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
-import styles from "./page.module.css"; // 新しいCSSモジュールをインポート
+import styles from "./page.module.css";
 
-export default function AttendanceCalendar() {
+function AttendanceCalendar() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,21 +31,15 @@ export default function AttendanceCalendar() {
       setMonth(m - 1);
     }
 
-    // ここで欠席データをフェッチするロジックを想定
-    // fetchAbsentData(year, month);
-
     return () => unsubscribe();
-  }, [router, searchParams, year, month]);
+  }, [router, searchParams]);
 
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/");
   };
 
-  
   const handleSave = () => {
-    // ここで欠席データを保存するロジックを想定
-    // e.g., saveAbsentData(year, month, absentDays);
     alert("出席データを保存しました。");
   };
 
@@ -84,7 +77,10 @@ export default function AttendanceCalendar() {
     return dayOfWeek !== 0 && dayOfWeek !== 6;
   });
 
-  const attendanceRate = weekdays.length > 0 ? ((weekdays.length - validAbsentDays.length) / weekdays.length) * 100 : 100;
+  const attendanceRate =
+    weekdays.length > 0
+      ? ((weekdays.length - validAbsentDays.length) / weekdays.length) * 100
+      : 100;
 
   const calendarCells = [];
   for (let i = 0; i < firstDayWeekday; i++) calendarCells.push(null);
@@ -94,14 +90,8 @@ export default function AttendanceCalendar() {
   for (let i = 0; i < Math.ceil(calendarCells.length / 7); i++) {
     weeks.push(calendarCells.slice(i * 7, i * 7 + 7));
   }
-=======
-import { Suspense } from "react";
-import AttendanceCalendar from "./AttenddanceCalendarContent.js";
->>>>>>> 2f4c5db41b0cec69c24d3af72dd1bf36d1c5a526
 
-export default function CalendarPage() {
   return (
-<<<<<<< HEAD
     <div className={styles.background}>
       <div className={styles.container}>
         <header className={styles.header}>
@@ -116,13 +106,21 @@ export default function CalendarPage() {
 
         <main className={styles.calendarCard}>
           <div className={styles.calendarHeader}>
-            <h2>{year}年 {month + 1}月</h2>
+            <h2>
+              {year}年 {month + 1}月
+            </h2>
           </div>
 
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
+                <th>日</th>
+                <th>月</th>
+                <th>火</th>
+                <th>水</th>
+                <th>木</th>
+                <th>金</th>
+                <th>土</th>
               </tr>
             </thead>
             <tbody>
@@ -134,8 +132,9 @@ export default function CalendarPage() {
                     const date = new Date(year, month, day);
                     const dayOfWeek = date.getDay();
                     const isAbsent = absentDays.has(day);
-                    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-                    const isToday = new Date().toDateString() === date.toDateString();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    const isToday =
+                      new Date().toDateString() === date.toDateString();
 
                     let cellClassName = styles.dayCell;
                     if (isWeekend) cellClassName += ` ${styles.weekend}`;
@@ -143,13 +142,14 @@ export default function CalendarPage() {
                     if (isToday) cellClassName += ` ${styles.today}`;
                     if (!isWeekend) cellClassName += ` ${styles.weekday}`;
 
-
                     return (
                       <td
                         key={idx}
                         onClick={() => !isWeekend && toggleAbsent(day)}
                         className={cellClassName}
-                        title={isAbsent ? '欠席' : isWeekend ? '土日' : '出席'}
+                        title={
+                          isAbsent ? "欠席" : isWeekend ? "土日" : "出席"
+                        }
                       >
                         {day}
                       </td>
@@ -164,30 +164,48 @@ export default function CalendarPage() {
             <div className={styles.rate}>
               出席率: <strong>{attendanceRate.toFixed(1)}%</strong>
             </div>
-             <div className={styles.legend}>
-              <span className={`${styles.legendItem} ${styles.present}`}></span> 出席
-              <span className={`${styles.legendItem} ${styles.absentLegend}`}></span> 欠席
+            <div className={styles.legend}>
+              <span
+                className={`${styles.legendItem} ${styles.present}`}
+              ></span>{" "}
+              出席
+              <span
+                className={`${styles.legendItem} ${styles.absentLegend}`}
+              ></span>{" "}
+              欠席
             </div>
           </div>
-          
+
           <div className={styles.actions}>
-            <button className={`${styles.button} ${styles.resetButton}`} onClick={resetAbsentDays}>
+            <button
+              className={`${styles.button} ${styles.resetButton}`}
+              onClick={resetAbsentDays}
+            >
               リセット
             </button>
-            <button className={`${styles.button} ${styles.reasonButton}`} onClick={() => router.push("/Reason")}>
+            <button
+              className={`${styles.button} ${styles.reasonButton}`}
+              onClick={() => router.push("/Reason")}
+            >
               欠席理由
             </button>
-            <button className={`${styles.button} ${styles.saveButton}`} onClick={handleSave}>
+            <button
+              className={`${styles.button} ${styles.saveButton}`}
+              onClick={handleSave}
+            >
               保存する
             </button>
           </div>
         </main>
       </div>
     </div>
-=======
+  );
+}
+
+export default function CalendarPage() {
+  return (
     <Suspense fallback={<div>読み込み中...</div>}>
       <AttendanceCalendar />
     </Suspense>
->>>>>>> 2f4c5db41b0cec69c24d3af72dd1bf36d1c5a526
   );
 }
