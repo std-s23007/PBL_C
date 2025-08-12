@@ -1,206 +1,150 @@
-.background {
-  background-color: #F0F2F5;
-  min-height: 100vh;
-  padding: 40px 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
+/* page.module.css */
+
 .container {
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 420px;
+  margin: 40px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  background: #f9f9f9;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 6px 8px;
+  margin-bottom: 20px;
+  user-select: none;
+}
+
+.dayCell {
+  background-color: #d0f0c0;
+  border-radius: 8px;
+  padding: 12px 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+  color: #2e7d32;
+  box-shadow: 0 1px 3px rgba(46,125,50,0.2);
+}
+
+.dayCellHover:hover {
+  background-color: #a3d79a;
+}
+
+.absent {
+  background-color: #f8c1c1;
+  color: #b71c1c;
+  box-shadow: 0 1px 6px rgba(183,28,28,0.3);
+}
+
+.weekend {
+  background-color: #eee;
+  color: #999;
+  cursor: default;
+  box-shadow: none;
+}
+
+.tableHeader {
+  font-weight: 700;
+  padding-bottom: 10px;
+  color: #555;
+}
+
+.rate {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #2e7d32;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 25px;
+}
+
+/* ボタン基本スタイル */
+.buttonBase {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: background-color 0.25s ease;
+}
+
+/* 個別ボタンカラー */
+.resetButton {
+  background-color: #4caf50;
+}
+.resetButton:hover {
+  background-color: #388e3c;
+}
+
+.reasonButton {
+  background-color: #e53935;
+}
+.reasonButton:hover {
+  background-color: #b71c1c;
+}
+
+.logoutButton {
+  background-color: #757575;
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 16px;
+}
+.logoutButton:hover {
+  background-color: #424242;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  background-color: white;
-  padding: 15px 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-.userInfo {
-  font-size: 14px;
-  color: #555;
-}
-.userInfo p {
-    margin: 0;
-    font-size: 12px;
-}
-.userInfo strong {
-    font-size: 16px;
-    color: #111;
-}
-.logoutButton {
-  padding: 8px 16px;
-  font-size: 14px;
-  background-color: #F44336;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-.logoutButton:hover {
-  background-color: #D32F2F;
-}
-.calendarCard {
-  background-color: #FFFFFF;
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  text-align: center;
-}
-.calendarHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
+  font-weight: 600;
   color: #333;
 }
-.calendarHeader h2 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-}
-.navButton {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.2s;
-}
-.navButton:hover {
-  color: #333;
-}
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 25px;
-}
-.table th {
-    padding-bottom: 15px;
-    font-weight: 500;
-    color: #888;
-    font-size: 14px;
-}
-.dayCell {
-  border: 1px solid #E0E0E0;
-  padding: 0;
-  width: 14.28%;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  font-size: 16px;
-  transition: background-color 0.2s, color 0.2s;
-  position: relative;
-}
-.weekday {
-    background-color: #E8F5E9; /* 出席の薄い緑 */
-    color: #388E3C;
-}
-.weekday:hover {
-    background-color: #DCEDDC;
-}
-.absent {
-    background-color: #FFCDD2; /* 欠席の薄い赤 */
-    color: #C62828;
-    font-weight: bold;
-}
-.weekend {
-  background-color: #F5F5F5;
-  color: #aaa;
-  cursor: default;
-}
-.today::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #1976D2;
-}
-.summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding: 0 10px;
-}
-.rate {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-}
-.rate strong {
-    font-size: 20px;
-    color: #007BFF;
-}
-.legend {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-}
-.legendItem {
-    width: 16px;
-    height: 16px;
-    border-radius: 4px;
-    margin-right: 8px;
-    margin-left: 15px;
-}
-.present {
-    background-color: #E8F5E9;
-    border: 1px solid #C8E6C9;
-}
-.absentLegend {
-    background-color: #FFCDD2;
-    border: 1px solid #EF9A9A;
-}
-.actions {
+
+.monthSwitch {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
 }
-.button {
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 600;
+
+.monthSwitchButton {
+  background-color: #1976d2;
+  padding: 10px 18px;
+  border-radius: 20px;
   color: white;
+  font-weight: 600;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background-color 0.25s ease;
 }
-.button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+.monthSwitchButton:hover {
+  background-color: #0d47a1;
 }
-.resetButton {
-  background-color: #78909C;
+
+.monthTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1976d2;
 }
-.resetButton:hover {
-  background-color: #607D8B;
-}
-.reasonButton {
-  background-color: #EF5350;
-}
-.reasonButton:hover {
-  background-color: #E53935;
-}
-.saveButton {
-  background-color: #42A5F5;
-}
-.saveButton:hover {
-  background-color: #1E88E5;
-}
-.loading {
-    text-align: center;
-    padding: 50px;
-    font-size: 18px;
-    color: #888;
+
+.absentList {
+  font-size: 15px;
+  color: #444;
+  margin-top: 10px;
+  min-height: 26px;
 }

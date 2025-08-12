@@ -1,15 +1,19 @@
+
+
 .container {
   max-width: 600px;
   margin: 0 auto;
   padding: 2rem;
   font-family: sans-serif;
 }
+
 .title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 1rem;
   text-align: center;
 }
+
 .formGroup {
   width: 100%;
   padding: 0.8rem;
@@ -19,8 +23,9 @@
   font-size: 16px;
   box-sizing: border-box;
 }
+
 .button {
-  background-color: #0070F3;
+  background-color: #0070f3;
   color: white;
   padding: 0.8rem 1.5rem;
   border: none;
@@ -30,12 +35,14 @@
   margin-right: 0.5rem;
   transition: background-color 0.3s;
 }
+
 .button:hover {
-  background-color: #005DC1;
+  background-color: #005dc1;
 }
+
 .deletebutton {
   margin-left: 20px;
-  background-color: #E74C3C;
+  background-color: #e74c3c;
   color: white;
   border: none;
   padding: 0.4rem 0.8rem;
@@ -43,9 +50,11 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
 .deletebutton:hover {
-  background-color: #C0392B;
+  background-color: #c0392b;
 }
+
 .cancelbutton {
   background-color: #888;
   color: white;
@@ -56,12 +65,15 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 .cancelbutton:hover {
   background-color: #666;
 }
+
 .reviewSection {
   margin-top: 2rem;
 }
+
 .reviewTitle {
   font-size: 20px;
   font-weight: bold;
@@ -69,6 +81,7 @@
   border-bottom: 1px solid #ddd;
   padding-bottom: 0.5rem;
 }
+
 .reviewItem {
   display: flex;
   justify-content: space-between;
@@ -76,6 +89,7 @@
   border-bottom: 1px solid #eee;
   padding: 1rem 0;
 }
+
 .reviewDate {
   font-size: 14px;
   color: gray;
