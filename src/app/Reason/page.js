@@ -1,5 +1,6 @@
 // components/Reason.tsx
 "use client";
+<<<<<<< HEAD:src/app/Reason/page.tsx
 import styles from "./page.module.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -8,14 +9,31 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import {collection, updateDoc, where, getDocs, doc, deleteField} from "firebase/firestore";
 import { query } from "firebase/firestore";
 
+=======
+import styles from "./page.module.css"
+import { useState } from "react";
+<<<<<<< HEAD:src/app/Reason/page.tsx
+import { useRouter } from 'next/navigation';
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
 type Review = {
   id?: string;
   comment?: string;
   date: string;
   userId: string;
 };
+=======
+import styles from "./page.module.css";
+>>>>>>> 1d9baa7716e5c6fc67c2a7167ee2b2ed37e4a5ae:src/app/Reason/page.js
 
+<<<<<<< HEAD:src/app/Reason/page.tsx
 export default function Reason() {
+=======
+export default function Home() {
+  const [reviews, setReviews] = useState([]);
+  const [name, setName] = useState("");
+  const [comment, setComment] = useState("");
+<<<<<<< HEAD:src/app/Reason/page.tsx
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [comment, setComment] = useState<string | undefined>(undefined);
@@ -24,6 +42,7 @@ export default function Reason() {
   const [loading, setLoading] = useState(true);
   
 
+<<<<<<< HEAD:src/app/Reason/page.tsx
   // ユーザー認証の確認
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -59,6 +78,12 @@ export default function Reason() {
 
    // 投稿を Firestore に「追加」ではなく「更新」するロジックに変更
   const handleSubmit = async (e: React.FormEvent) => {
+=======
+  const handleSubmit = (e: React.FormEvent) => {
+=======
+  const handleSubmit = (e) => {
+>>>>>>> 1d9baa7716e5c6fc67c2a7167ee2b2ed37e4a5ae:src/app/Reason/page.js
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
     e.preventDefault();
     if (!user || !comment || !comment.trim() || !date.trim()) return;
 
@@ -109,6 +134,7 @@ export default function Reason() {
   if (loading) return <div className={styles.loading}>読み込み中...</div>;
 
   return (
+<<<<<<< HEAD:src/app/Reason/page.tsx
     <div className={styles.wrapper}>
       <main className={styles.container}>
         <h1 className={styles.title}>欠席理由</h1>
@@ -142,6 +168,10 @@ export default function Reason() {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>欠席理由</h1>
+=======
+    <main className="max-w-xl mx-auto p-4">
+      <h1>欠席理由</h1>
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           type="date"
@@ -157,9 +187,19 @@ export default function Reason() {
           className={styles.formGroup}
           required
         />
+<<<<<<< HEAD:src/app/Reason/page.tsx
         <button 
         type="submit" 
         className={styles.button}
+=======
+        <button
+<<<<<<< HEAD:src/app/Reason/page.tsx
+          type="submit"
+          className={styles.button}
+=======
+          className={styles.myButton}
+>>>>>>> 1d9baa7716e5c6fc67c2a7167ee2b2ed37e4a5ae:src/app/Reason/page.js
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
         >
           登録
         </button>
@@ -171,6 +211,7 @@ export default function Reason() {
           キャンセル
         </button>
       </form>
+<<<<<<< HEAD:src/app/Reason/page.tsx
 
       <div className={styles.reviewSection}>
         <h2 className={styles.reviewTitle}>あなたの投稿一覧</h2>
@@ -197,6 +238,17 @@ export default function Reason() {
             >
               キャンセル
             </button>
+=======
+      <div className="mt-6">
+        <h5>投稿一覧</h5>
+        {reviews.map((r, index) => (
+          <div key={index} className="border-b py-2">
+            <p className="font-bold">
+              {r.name}{" "}
+              <span className="text-sm text-gray-500 ml-2">{r.date}</span>
+            </p>
+            <p>{r.comment}</p>
+>>>>>>> a2fe52297f1bfa726edd62c9d5aeb1bfb58ba19d:src/app/Reason/page.js
           </div>
         </form>
 
