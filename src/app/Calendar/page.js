@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "../../firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
@@ -93,8 +94,14 @@ export default function AttendanceCalendar() {
   for (let i = 0; i < Math.ceil(calendarCells.length / 7); i++) {
     weeks.push(calendarCells.slice(i * 7, i * 7 + 7));
   }
+=======
+import { Suspense } from "react";
+import AttendanceCalendar from "./AttenddanceCalendarContent.js";
+>>>>>>> 2f4c5db41b0cec69c24d3af72dd1bf36d1c5a526
 
+export default function CalendarPage() {
   return (
+<<<<<<< HEAD
     <div className={styles.background}>
       <div className={styles.container}>
         <header className={styles.header}>
@@ -177,5 +184,10 @@ export default function AttendanceCalendar() {
         </main>
       </div>
     </div>
+=======
+    <Suspense fallback={<div>読み込み中...</div>}>
+      <AttendanceCalendar />
+    </Suspense>
+>>>>>>> 2f4c5db41b0cec69c24d3af72dd1bf36d1c5a526
   );
 }
