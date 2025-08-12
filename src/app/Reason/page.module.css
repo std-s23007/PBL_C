@@ -1,97 +1,260 @@
+/* styles/page.module.css */
 
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 上部に配置 */
+  padding: 2rem 0;
+  background-color: #f0f2f5; /* 優しい背景色 */
+}
 
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: sans-serif;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.formGroup {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  max-width: 700px;
   width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
   box-sizing: border-box;
 }
 
-.button {
-  background-color: #0070f3;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border: none;
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+
+.form {
+  margin-bottom: 2.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: background-color 0.3s;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
 
-.button:hover {
-  background-color: #005dc1;
+.input::placeholder {
+  color: #bbb;
 }
 
-.deletebutton {
-  margin-left: 20px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-.deletebutton:hover {
-  background-color: #c0392b;
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
 }
 
-.cancelbutton {
-  background-color: #888;
-  color: white;
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.cancelbutton:hover {
-  background-color: #666;
-}
-
-.reviewSection {
+.buttonGroup {
+  display: flex;
+  gap: 1rem; /* ボタン間のスペース */
+  justify-content: flex-end; /* 右寄せ */
   margin-top: 2rem;
 }
 
-.reviewTitle {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5rem;
+.primaryButton,
+.secondaryButton {
+  padding: 0.9rem 1.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.reviewItem {
+.primaryButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.primaryButton:hover {
+  background-color: #0069d9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.secondaryButton {
+  background-color: #6c757d;
+  color: white;
+}
+
+.secondaryButton:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+}
+
+.reviewSection {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #f0f0f0; /* 上部の区切り線 */
+}
+
+.reviewTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.noReviews {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #e0e0e0;
+}
+
+.reviewList {
+  display: grid;
+  gap: 1rem; /* カード間のスペース */
+}
+
+.reviewCard {
+  background-color: #fcfcfc;
+  border: 1px solid #e9e9e9;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid #eee;
-  padding: 1rem 0;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reviewCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.reviewContent {
+  flex-grow: 1; /* 内容がスペースを占める */
+  margin-right: 1rem;
 }
 
 .reviewDate {
-  font-size: 14px;
-  color: gray;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.reviewComment {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0; /* 縮小しない */
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .reviewTitle {
+    font-size: 1.5rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column; /* スマートフォンでは縦並び */
+    gap: 0.8rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%; /* 幅いっぱいに */
+    padding: 0.8rem 1.5rem;
+  }
+
+  .reviewCard {
+    flex-direction: column; /* スマートフォンでは縦並び */
+    align-items: stretch; /* 幅いっぱいに */
+    padding: 1rem;
+  }
+
+  .reviewContent {
+    margin-right: 0;
+    margin-bottom: 0.8rem;
+  }
+
+  .deleteButton {
+    width: 100%;
+    padding: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .input,
+  .textarea {
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+  }
 }

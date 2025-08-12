@@ -42,12 +42,6 @@ export default function AttendanceCalendar() {
     router.push("/");
   };
 
-  const changeMonth = (offset) => {
-    const newDate = new Date(year, month + offset, 1);
-    const newYear = newDate.getFullYear();
-    const newMonth = newDate.getMonth();
-    router.push(`/attendance?year=${newYear}&month=${newMonth + 1}`);
-  };
   
   const handleSave = () => {
     // ここで欠席データを保存するロジックを想定
@@ -115,9 +109,7 @@ export default function AttendanceCalendar() {
 
         <main className={styles.calendarCard}>
           <div className={styles.calendarHeader}>
-            <button onClick={() => changeMonth(-1)} className={styles.navButton}>&lt;</button>
             <h2>{year}年 {month + 1}月</h2>
-            <button onClick={() => changeMonth(1)} className={styles.navButton}>&gt;</button>
           </div>
 
           <table className={styles.table}>
