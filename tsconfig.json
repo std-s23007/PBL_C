@@ -22,6 +22,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/Reason/page.js", "src/app/Register/Page.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/Reason/page.js",
+    "src/app/Calendar/AttenddanceCalendarContent.js"
+  ],
   "exclude": ["node_modules"]
 }
