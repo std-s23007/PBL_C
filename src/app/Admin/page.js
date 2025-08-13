@@ -1,91 +1,108 @@
-'use client';
+"use client";
 
-import styles from './page.module.css';
-import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { initializeApp, getApps } from "firebase/app";
-import { useRouter } from 'next/navigation';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDug6k408E81owFyQNA98YjikBAqGlE7mM",
-  authDomain: "pbl-c-54088.firebaseapp.com",
-  projectId: "pbl-c-54088",
-  storageBucket: "pbl-c-54088.appspot.com",
-  messagingSenderId: "44768519903",
-  appId: "1:44768519903:web:6b8a002e5981bb1300ab6a",
-  measurementId: "G-D8B3QJG0G9"
-};
-
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { auth, db } from "../../firebase";
+import { collection, onSnapshot } from "firebase/firestore";
+import styles from "./page.module.css";
 
 export default function AdminPage() {
-  const router = useRouter();  // ←ここを追加
-
-  const [students, setStudents] = useState([]);
+  const router = useRouter();
+  const [attendanceData, setAttendanceData] = useState({});
+  const [userProfiles, setUserProfiles] = useState({});
+  const [reviewsData, setReviewsData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // データ取得
-  const fetchStudents = async () => {
-    setLoading(true);
-    const querySnapshot = await getDocs(collection(db, "students"));
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setStudents(data);
-    setLoading(false);
-  };
-
+  // 出席データ、ユーザープロフィール、レビューをリアルタイム取得
   useEffect(() => {
-    fetchStudents();
+    setLoading(true);
+
+    const unsubscribeAttendance = onSnapshot(collection(db, "attendance"), (attendanceSnap) => {
+      const attendance = {};
+      attendanceSnap.forEach((doc) => {
+        attendance[doc.id] = doc.data();
+      });
+      setAttendanceData(attendance);
+      setLoading(false);
+    });
+
+    const unsubscribeUsers = onSnapshot(collection(db, "users"), (usersSnap) => {
+      const profiles = {};
+      usersSnap.forEach((doc) => {
+        const data = doc.data();
+        profiles[doc.id] = data.email || "メール不明";
+      });
+      setUserProfiles(profiles);
+    });
+
+    const unsubscribeReviews = onSnapshot(collection(db, "reviews"), (reviewsSnap) => {
+      const reviewsByUser = {};
+      reviewsSnap.forEach((doc) => {
+        const data = doc.data();
+        const uid = data.userId;
+        if (!reviewsByUser[uid]) {
+          reviewsByUser[uid] = [];
+        }
+        reviewsByUser[uid].push({
+          id: doc.id,
+          ...data,
+        });
+      });
+      setReviewsData(reviewsByUser);
+    });
+
+    return () => {
+      unsubscribeAttendance();
+      unsubscribeUsers();
+      unsubscribeReviews();
+    };
   }, []);
 
-  // 削除処理
-  const handleDelete = async (id) => {
-    if (!confirm("本当に削除しますか？")) return;
-    try {
-      await deleteDoc(doc(db, "students", id));
-      alert("削除しました");
-      fetchStudents();  // 再読み込み
-    } catch (e) {
-      alert("削除エラー：" + e.message);
-    }
+  // 月の表示フォーマット
+  const formatMonthKey = (key) => {
+    const [year, month] = key.split("-");
+    return `${year}年${parseInt(month)}月`;
   };
 
-  if (loading) return <p className={styles.message}>読み込み中...</p>;
+  if (loading) return <div>データ読み込み中...</div>;
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.title}>管理者画面</h1>
-      {students.length === 0 ? (
-        <p className={styles.message}>登録データなし</p>
-      ) : (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.th}>学籍番号</th>
-              <th className={styles.th}>氏名</th>
-              <th className={styles.th}>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map(student => (
-              <tr key={student.id} className={styles.row}>
-                <td className={styles.td}>{student.学籍番号}</td>
-                <td className={styles.td}>{student.氏名}</td>
-                <td className={styles.td}>
-                  <button className={styles.deletebutton} onClick={() => handleDelete(student.id)}>
-                    削除
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      <button className={styles.backButton} onClick={() => 
-      {alert('ログイン画面へ戻ります');
-      router.push('/')}}>
-          戻る
+    <div className={styles.container}>
+      <h1>出席状況</h1>
+      <button className={styles.button} onClick={() => router.push("/")}>
+        ログイン画面に戻る
       </button>
-    </main>
+
+      {Object.keys(attendanceData).length === 0 && <p>出席データがありません</p>}
+
+      {Object.entries(attendanceData).map(([uid, months]) => (
+        <div key={uid} className={styles.userSection}>
+          <h2>メール: {userProfiles[uid] || "不明なユーザー"}</h2>
+          {Object.keys(months).length === 0 && <p>データなし</p>}
+          <ul>
+            {Object.entries(months).map(([monthKey, absentDays]) => (
+              <li key={monthKey}>
+                <strong>{formatMonthKey(monthKey)}：</strong>
+                {absentDays.length > 0 ? absentDays.join(", ") : "欠席なし"}
+              </li>
+            ))}
+          </ul>
+
+          {/* レビュー表示 */}
+          <h3>欠席理由</h3>
+          {!reviewsData[uid] && <p>レビューなし</p>}
+          {reviewsData[uid] && (
+            <ul>
+              {reviewsData[uid].map((review) => (
+                <li key={review.id}>
+                  <strong>{userProfiles[review.userId] || "名無し"}</strong>：{review.comment} <br />
+                  <small>{review.date}</small>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
