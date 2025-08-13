@@ -106,7 +106,7 @@ export default function Reason() {
         <button 
         type="submit" 
         className={styles.button}
-        onClick={() => router.push("/Calendar")}>
+        onClick={() => router.push}>
           登録
         </button>
         <button
@@ -114,7 +114,7 @@ export default function Reason() {
           className={styles.cancelbutton}
           onClick={() => router.push("/Calendar")}
         >
-          キャンセル
+          戻る
         </button>
       </form>
 
