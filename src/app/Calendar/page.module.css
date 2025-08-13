@@ -1,33 +1,32 @@
-/* page.module.css */
-
 .container {
-  max-width: 420px;
+  max-width: 760px; /* 少し大きく */
   margin: 40px auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   background: #f9f9f9;
-  padding: 20px 25px;
+  padding: 22px 32px;
   border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 6px 8px;
-  margin-bottom: 20px;
+  border-spacing: 8px 10px;
+  margin-bottom: 26px;
   user-select: none;
 }
 
 .dayCell {
   background-color: #d0f0c0;
-  border-radius: 8px;
-  padding: 12px 0;
+  border-radius: 10px;
+  padding: 16px 0;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 17px; /* 少し大きく */
   transition: background-color 0.25s ease;
   color: #2e7d32;
-  box-shadow: 0 1px 3px rgba(46,125,50,0.2);
+  box-shadow: 0 1px 6px rgba(46,125,50,0.25);
 }
 
 .dayCellHover:hover {
@@ -37,7 +36,7 @@
 .absent {
   background-color: #f8c1c1;
   color: #b71c1c;
-  box-shadow: 0 1px 6px rgba(183,28,28,0.3);
+  box-shadow: 0 1px 7px rgba(183,28,28,0.3);
 }
 
 .weekend {
@@ -45,42 +44,42 @@
   color: #999;
   cursor: default;
   box-shadow: none;
+  font-size: 15px; /* 少し大きく */
 }
 
 .tableHeader {
   font-weight: 700;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
+  font-size: 17px; /* 少し大きく */
   color: #555;
 }
 
 .rate {
-  font-size: 20px;
+  font-size: 26px; /* 少し大きく */
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   color: #2e7d32;
 }
 
 .buttonRow {
   display: flex;
   justify-content: center;
-  gap: 14px;
-  margin-top: 25px;
+  gap: 16px; /* 少し広げる */
+  margin-top: 30px;
 }
 
-/* ボタン基本スタイル */
 .buttonBase {
-  padding: 12px 24px;
+  padding: 16px 30px;
   border: none;
-  border-radius: 24px;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 26px;
+  font-size: 15px; /* 少し大きく */
+  font-weight: 700;
   cursor: pointer;
   color: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 7px rgba(0,0,0,0.18);
   transition: background-color 0.25s ease;
 }
 
-/* 個別ボタンカラー */
 .resetButton {
   background-color: #4caf50;
 }
@@ -97,9 +96,9 @@
 
 .logoutButton {
   background-color: #757575;
-  padding: 8px 16px;
-  font-size: 13px;
-  border-radius: 16px;
+  padding: 9px 18px; /* 少し大きく */
+  font-size: 14px; /* 少し大きく */
+  border-radius: 18px;
 }
 .logoutButton:hover {
   background-color: #424242;
@@ -109,8 +108,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  font-weight: 600;
+  margin-bottom: 28px;
+  font-weight: 700;
+  font-size: 17px; /* 少し大きく */
   color: #333;
 }
 
@@ -119,15 +119,16 @@
   justify-content: center;
   align-items: center;
   gap: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 26px;
 }
 
 .monthSwitchButton {
   background-color: #1976d2;
-  padding: 10px 18px;
-  border-radius: 20px;
+  padding: 13px 22px; /* 少し大きく */
+  border-radius: 22px;
   color: white;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 15px; /* 少し大きく */
   border: none;
   cursor: pointer;
   transition: background-color 0.25s ease;
@@ -137,14 +138,14 @@
 }
 
 .monthTitle {
-  font-size: 22px;
+  font-size: 21px; /* 少し大きく */
   font-weight: 700;
   color: #1976d2;
 }
 
 .absentList {
-  font-size: 15px;
+  font-size: 15px; /* 少し大きく */
   color: #444;
-  margin-top: 10px;
-  min-height: 26px;
+  margin-top: 14px;
+  min-height: 24px;
 }

@@ -1,7 +1,7 @@
 .container {
-  max-width: 400px;
+  max-width: 600px;          /* 400px → 600px に広げる */
   margin: 60px auto;
-  padding: 30px;
+  padding: 40px 35px;        /* パディングも増やしてゆったり */
   border: 1px solid #ddd;
   border-radius: 12px;
   background-color: #fdfdfd;
@@ -10,10 +10,10 @@
 }
 
 .title {
-  font-size: 32px;
+  font-size: 36px;           /* 32px → 36px に少し大きく */
   font-weight: bold;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;       /* 少し余白を増やす */
   color: #333;
   /* クリック隠しボタンの親にするならposition relativeしてもOK */
   /* position: relative; */
@@ -21,21 +21,21 @@
 }
 
 .formGroup {
-  margin-bottom: 20px;
+  margin-bottom: 24px;       /* 20px → 24px に少し増やす */
   display: flex;
   flex-direction: column;
 }
 
 .formGroup label {
-  margin-bottom: 8px;
-  font-size: 14px;
+  margin-bottom: 10px;       /* 8px → 10px */
+  font-size: 16px;           /* 14px → 16px */
   color: #555;
 }
 
 .input {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 8px;
+  padding: 14px;             /* 10px → 14px にゆったり */
+  font-size: 18px;           /* 16px → 18px */
+  border-radius: 10px;       /* 8px → 10px */
   border: 1px solid #ccc;
   background-color: #fff;
   transition: border-color 0.2s;
@@ -48,12 +48,12 @@
 
 .button {
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
+  padding: 16px;             /* 12px → 16px */
+  font-size: 18px;           /* 16px → 18px */
   background-color: #1976d2;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;       /* 8px → 10px */
   cursor: pointer;
   transition: background-color 0.2s;
 }

@@ -1,39 +1,43 @@
-
 .container {
-  max-width: 400px;
+  max-width: 600px;          /* 400px → 600px に広げる */
   margin: 40px auto;
-  padding: 20px;
+  padding: 30px 40px;        /* 20px → 横と上下で広めに */
   border: 1px solid #ccc;
-  border-radius: 10px;
-  font-family: sans-serif;
+  border-radius: 12px;       /* 10px → 12pxで少し丸く */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 20px;       /* 15px → 20pxにゆとり */
   display: flex;
   flex-direction: column;
 }
 
 .input {
-  padding: 8px;
-  font-size: 16px;
-  border-radius: 5px;
+  padding: 12px;             /* 8px → 12px */
+  font-size: 18px;           /* 16px → 18px */
+  border-radius: 8px;        /* 5px → 8px */
   border: 1px solid #aaa;
+  box-sizing: border-box;
 }
 
 .buttonGroup {
   display: flex;
   justify-content: space-between;
+  gap: 12px;                 /* ボタン間の余白を少し増やす */
 }
 
 .button {
-    margin-top: 20px;
-  padding: 10px 20px;
+  margin-top: 24px;          /* 20px → 24px */
+  padding: 14px 28px;        /* 10px 20px → 14px 28pxで大きく */
   background-color: #1976d2;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;       /* 5px → 10pxで丸く */
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {

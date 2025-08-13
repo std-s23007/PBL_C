@@ -3,17 +3,17 @@
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px 40px;               /* paddingを少し広く */
   font-family: "Segoe UI", sans-serif;
   background-color: #f9f9f9;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);  /* 影をやや大きめに */
 }
 
 .title {
-  font-size: 28px;
+  font-size: 32px;                  /* 少し大きめ */
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   color: #333;
 }
 
@@ -22,11 +22,11 @@
   background-color: #757575;
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
+  padding: 12px 22px;               /* paddingを大きめに */
+  border-radius: 8px;              /* 丸みを強調 */
   cursor: pointer;
-  font-size: 14px;
-  margin-bottom: 20px;
+  font-size: 16px;                 /* 少し大きめ */
+  margin-bottom: 24px;
   transition: background-color 0.3s ease;
 }
 .button:hover {
@@ -35,29 +35,30 @@
 
 .userSection {
   background: white;
-  padding: 15px 20px;
-  margin-bottom: 15px;
-  border-radius: 8px;
+  padding: 20px 30px;              /* paddingを広めに */
+  margin-bottom: 20px;
+  border-radius: 10px;             /* 少し丸く */
   border: 1px solid #ddd;
 }
 
 .userSectionTitle {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 20px;                 /* 少し大きめ */
+  margin-bottom: 14px;
   color: #555;
 }
 
 .list {
-  padding-left: 20px;
+  padding-left: 24px;              /* 左余白を少し広く */
 }
 
 .listItem {
-  margin: 6px 0;
-  font-size: 15px;
+  margin: 8px 0;                  /* 上下の余白を増やす */
+  font-size: 16px;                /* 文字を少し大きめ */
   color: #444;
 }
 
 .message {
-  font-size: 14px;
+  font-size: 15px;                /* 少し大きく */
   color: #888;
+  margin-top: 12px;               /* 上に余白 */
 }
