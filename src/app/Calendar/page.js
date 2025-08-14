@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import styles from "./page.module.css";
 
 export default function CalendarPage() {
+  const router = useRouter();
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [absentDays, setAbsentDays] = useState([]);
@@ -20,10 +22,11 @@ export default function CalendarPage() {
         loadAbsentData(u.uid, year, month);
       } else {
         setUser(null);
+        router.push("/");
       }
     });
     return () => unsubscribe();
-  }, [year, month]);
+  }, [year, month, router]);
 
   // Firestoreから欠席データを読み込み
   const loadAbsentData = async (uid, y, m) => {
@@ -44,31 +47,22 @@ export default function CalendarPage() {
     alert("保存しました！");
   };
 
-  // 欠席日リセット
-  const resetAbsentData = () => {
-    setAbsentDays([]);
-  };
+  const resetAbsentData = () => setAbsentDays([]);
 
-  // 月の日数
-  const daysInMonth = (y, m) => {
-    return new Date(y, m + 1, 0).getDate();
-  };
+  const daysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
 
-  // 日付クリックで欠席日をトグル
   const toggleAbsent = (day) => {
     setAbsentDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
-  // 出席率計算
   const attendanceRate = () => {
     const total = daysInMonth(year, month);
     const absent = absentDays.length;
     return Math.round(((total - absent) / total) * 100);
   };
 
-  // 前の月へ
   const prevMonth = () => {
     if (month === 0) {
       setMonth(11);
@@ -78,7 +72,6 @@ export default function CalendarPage() {
     }
   };
 
-  // 次の月へ
   const nextMonth = () => {
     if (month === 11) {
       setMonth(0);
@@ -135,7 +128,6 @@ export default function CalendarPage() {
         )}
       </div>
 
-      {/* 月移動ボタン追加 */}
       <div className={styles.monthSwitch}>
         <button className={styles.monthSwitchButton} onClick={prevMonth}>
           前の月
@@ -180,7 +172,10 @@ export default function CalendarPage() {
         >
           保存
         </button>
-         <button className={`${styles.buttonBase} ${styles.reasonButton}`} onClick={() => router.push("/Reason")}>
+        <button
+          className={`${styles.buttonBase} ${styles.reasonButton}`}
+          onClick={() => router.push("/Reason")}
+        >
           欠席理由
         </button>
       </div>

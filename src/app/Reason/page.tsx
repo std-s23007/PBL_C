@@ -1,9 +1,11 @@
+// components/Reason.tsx
 "use client";
 import styles from "./page.module.css";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
+
 import { collection, updateDoc, where, getDocs, doc, deleteField, query } from "firebase/firestore";
 
 type Review = {
@@ -16,12 +18,12 @@ type Review = {
 export default function Reason() {
   const router = useRouter();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [comment, setComment] = useState<string | undefined>(undefined);
+  const [comment, setComment] = useState("");
   const [date, setDate] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ユーザー認証の確認
+  // ユーザー認証チェック
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -34,11 +36,11 @@ export default function Reason() {
     return () => unsubscribe();
   }, [router]);
 
-  // Firestore からログインユーザーの投稿を取得
+  // Firestoreからログインユーザーの投稿取得
   useEffect(() => {
     async function fetchReviews() {
       if (!user) return;
-      const q = query(collection(db, "reviews"), where("userId", "==", user.uid));
+
       const querySnapshot = await getDocs(q);
       const userReviews = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -49,99 +51,22 @@ export default function Reason() {
     fetchReviews();
   }, [user]);
 
-  // 投稿を Firestore に「追加」ではなく「更新」するロジックに変更
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !comment || !comment.trim() || !date.trim()) return;
+    if (!user || !comment.trim() || !date.trim()) return;
 
-    // 更新対象のドキュメントを検索
+
     const q = query(
       collection(db, "reviews"),
       where("userId", "==", user.uid),
-      where("date", "==", date) // ユーザーIDと日付で検索
+      where("date", "==", date)
     );
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-      // 対応するデータが存在しない場合
-      alert("この日付の欠席記録がありません。\n先にカレンダーページで欠席登録をしてください。");
-      return; // 処理を中断
-    } else {
-      // 対応するデータが存在する場合、そのデータを更新する
-      const docToUpdate = querySnapshot.docs[0];
-      await updateDoc(doc(db, "reviews", docToUpdate.id), {
-        comment: comment,
-      });
-      alert("欠席理由を登録しました。");
-      router.push("/Calendar"); // カレンダーページに戻る
+
     }
-  };
 
-  // 「理由(comment)フィールド」を削除
-  const handleDelete = async (id: string | undefined) => {
-    if (!id) return;
-
-    const docRef = doc(db, "reviews", id);
-    await updateDoc(docRef, {
-      comment: deleteField(),
-    });
-
-    // ローカルstateからも削除して即時反映
-    setReviews(reviews.filter((r) => r.id !== id));
-    alert("欠席理由を削除しました。");
-  };
-
-  if (loading) return <div>読み込み中...</div>;
-
-  return (
-    <main className={styles.container}>
-      <h1 className={styles.title}>欠席理由</h1>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className={styles.formGroup}
-          required
-        />
-        <textarea
-          placeholder="欠席理由"
-          value={comment ?? ""}
-          onChange={(e) => setComment(e.target.value)}
-          className={styles.formGroup}
-          required
-        />
-        <button type="submit" className={styles.button}>
-          登録
-        </button>
-        <button
-          type="button"
-          className={styles.cancelbutton}
-          onClick={() => router.push("/Calendar")}
-        >
-          戻る
-        </button>
-      </form>
-
-      <div className={styles.reviewSection}>
-        <h2 className={styles.reviewTitle}>あなたの投稿一覧</h2>
-        {reviews
-          .filter((r) => r.comment && r.comment.trim() !== "")
-          .map((r) => (
-            <div key={r.id} className={styles.reviewItem}>
-              <div>
-                <p className={styles.reviewDate}>{r.date}</p>
-                <p>{r.comment}</p>
-              </div>
-              <button
-                className={styles.deletebutton}
-                onClick={() => handleDelete(r.id)}
-              >
-                削除
-              </button>
-            </div>
-          ))}
-      </div>
-    </main>
   );
 }
