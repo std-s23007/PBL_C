@@ -1,38 +1,43 @@
-
-
 .container {
-  max-width: 600px;
+  max-width: 750px;       /* 600px → 750px に拡大 */
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2.5rem;   /* 上下少し広め、左右余裕 */
   font-family: sans-serif;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 28px;        /* 少し大きく */
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .formGroup {
   width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
+  padding: 1rem;          /* 少し余裕 */
+  margin-bottom: 1.25rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;    /* 丸みを増やす */
+  font-size: 18px;        /* 少し大きく */
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup:focus,
+.formGroup:focus-within {
+  border-color: #0070f3;
+  outline: none;
 }
 
 .button {
   background-color: #0070f3;
   color: white;
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;     /* ボタン大きめ */
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;    /* ボタンも丸みを */
+  font-size: 18px;        /* フォント大きく */
   cursor: pointer;
-  margin-right: 0.5rem;
+  margin-right: 1rem;     /* 余白増加 */
   transition: background-color 0.3s;
 }
 
@@ -41,14 +46,15 @@
 }
 
 .deletebutton {
-  margin-left: 20px;
+  margin-left: 24px;      /* 少し余裕 */
   background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  padding: 0.6rem 1rem;   /* ボタンを少し大きく */
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-size: 15px;
 }
 
 .deletebutton:hover {
@@ -58,10 +64,10 @@
 .cancelbutton {
   background-color: #888;
   color: white;
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2rem;     /* ボタン大きめ */
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -71,15 +77,15 @@
 }
 
 .reviewSection {
-  margin-top: 2rem;
+  margin-top: 3rem;       /* 余白アップ */
 }
 
 .reviewTitle {
-  font-size: 20px;
+  font-size: 24px;        /* タイトル大きく */
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
 }
 
 .reviewItem {
@@ -87,11 +93,11 @@
   justify-content: space-between;
   align-items: flex-start;
   border-bottom: 1px solid #eee;
-  padding: 1rem 0;
+  padding: 1.25rem 0;     /* 余白増やす */
 }
 
 .reviewDate {
-  font-size: 14px;
+  font-size: 15px;        /* 少し大きめ */
   color: gray;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
