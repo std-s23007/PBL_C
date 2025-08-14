@@ -2,67 +2,58 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 import styles from "./page.module.css";
 
 export default function AdminPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
   const [attendanceData, setAttendanceData] = useState({});
   const [userProfiles, setUserProfiles] = useState({});
   const [reviewsData, setReviewsData] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // ログイン状態監視
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser || null);
-    });
-    return () => unsubscribe();
-  }, []);
+    let attendanceLoaded = false;
+    let usersLoaded = false;
+    let reviewsLoaded = false;
 
-  // 出席データ、ユーザープロフィール、レビューをリアルタイム取得
-  useEffect(() => {
-    if (!user) return;
-
-    setLoading(true);
-
-    const unsubscribeAttendance = onSnapshot(collection(db, "attendance"), (attendanceSnap) => {
-      const attendance = {};
-      attendanceSnap.forEach((doc) => {
-        attendance[doc.id] = doc.data();
+    const unsubscribeAttendance = onSnapshot(collection(db, "attendance"), (snap) => {
+      const data = {};
+      snap.forEach((doc) => {
+        data[doc.id] = doc.data();
       });
-      setAttendanceData(attendance);
-      setLoading(false);
+      setAttendanceData(data);
+      attendanceLoaded = true;
+      if (attendanceLoaded && usersLoaded && reviewsLoaded) setLoading(false);
     });
 
-    const unsubscribeUsers = onSnapshot(collection(db, "users"), (usersSnap) => {
+    const unsubscribeUsers = onSnapshot(collection(db, "users"), (snap) => {
       const profiles = {};
-      usersSnap.forEach((doc) => {
+      snap.forEach((doc) => {
         const data = doc.data();
-        profiles[doc.id] = data.email || "メール不明";
+        profiles[doc.id] = data.displayName || "名無し"; // displayNameを使用
       });
       setUserProfiles(profiles);
+      usersLoaded = true;
+      if (attendanceLoaded && usersLoaded && reviewsLoaded) setLoading(false);
     });
 
-    const unsubscribeReviews = onSnapshot(collection(db, "reviews"), (reviewsSnap) => {
-      // reviewsはユーザーごとにまとめる
+    const unsubscribeReviews = onSnapshot(collection(db, "reviews"), (snap) => {
       const reviewsByUser = {};
-      reviewsSnap.forEach((doc) => {
+      snap.forEach((doc) => {
         const data = doc.data();
-        // 例：レビューに userId フィールドがある前提
         const uid = data.userId;
-        if (!reviewsByUser[uid]) {
-          reviewsByUser[uid] = [];
-        }
+        if (!reviewsByUser[uid]) reviewsByUser[uid] = [];
         reviewsByUser[uid].push({
           id: doc.id,
-          ...data,
+          comment: data.comment,
+          date: data.date,
         });
       });
       setReviewsData(reviewsByUser);
+      reviewsLoaded = true;
+      if (attendanceLoaded && usersLoaded && reviewsLoaded) setLoading(false);
     });
 
     return () => {
@@ -70,64 +61,43 @@ export default function AdminPage() {
       unsubscribeUsers();
       unsubscribeReviews();
     };
-  }, [user]);
+  }, []);
 
-  // 月の表示フォーマット
-  const formatMonthKey = (key) => {
-    const [year, month] = key.split("-");
-    return `${year}年${parseInt(month)}月`;
-  };
-
-  if (!user)
-    return (
-      <div>
-        ログインしていません（ログイン画面から入ってください）
-        <br />
-        <button className={styles.button} onClick={() => router.push("/")}>
-          ログイン画面に戻る
-        </button>
-      </div>
-    );
-
-  if (loading) return <div>データ読み込み中...</div>;
+  if (loading) return <div>読み込み中...</div>;
 
   return (
     <div className={styles.container}>
-      <h1>出席状況</h1>
+      <h1 className={styles.title}>出席状況（管理者用）</h1>
       <button className={styles.button} onClick={() => router.push("/")}>
         ログイン画面に戻る
       </button>
 
-      {Object.keys(attendanceData).length === 0 && <p>出席データがありません</p>}
+      {Object.keys(userProfiles).map((uid) => {
+        const name = userProfiles[uid];
+        const attendance = attendanceData[uid] || {};
+        const absentDays = Object.values(attendance).flat();
+        const userReviews = reviewsData[uid] || [];
 
-      {Object.entries(attendanceData).map(([uid, months]) => (
-        <div key={uid} className={styles.userSection}>
-          <h2>メール: {userProfiles[uid] || "不明なユーザー"}</h2>
-          {Object.keys(months).length === 0 && <p>データなし</p>}
-          <ul>
-            {Object.entries(months).map(([monthKey, absentDays]) => (
-              <li key={monthKey}>
-                <strong>{formatMonthKey(monthKey)}：</strong>
-                {absentDays.length > 0 ? absentDays.join(", ") : "欠席なし"}
-              </li>
-            ))}
-          </ul>
+        return (
+          <div key={uid} className={styles.userSection}>
+            <h2 className={styles.userSectionTitle}>{name}</h2>
 
-          {/* レビュー表示 */}
-          <h3>欠席理由</h3>
-          {!reviewsData[uid] && <p>レビューなし</p>}
-          {reviewsData[uid] && (
-            <ul>
-              {reviewsData[uid].map((review) => (
-                <li key={review.id}>
-                  <strong>{userProfiles[review.userId] || "名無し"}</strong>：{review.comment} <br />
-                  <small>{review.date}</small>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      ))}
+            {absentDays.length > 0 && <div>{absentDays.join(", ")}</div>}
+
+            {userReviews.length > 0 ? (
+              <ul className={styles.list}>
+                {userReviews.map((review) => (
+                  <li key={review.id} className={styles.listItem}>
+                    {review.date}：{review.comment}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className={styles.message}>レビューなし</div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

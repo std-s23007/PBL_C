@@ -3,29 +3,28 @@
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 30px 40px;               /* paddingを少し広く */
+  padding: 30px 40px;
   font-family: "Segoe UI", sans-serif;
   background-color: #f9f9f9;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);  /* 影をやや大きめに */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  font-size: 32px;                  /* 少し大きめ */
+  font-size: 32px;
   text-align: center;
   margin-bottom: 24px;
   color: #333;
 }
 
-/* button はクラス名を付けて使う想定なので以下のようにします */
 .button {
   background-color: #757575;
   color: white;
   border: none;
-  padding: 12px 22px;               /* paddingを大きめに */
-  border-radius: 8px;              /* 丸みを強調 */
+  padding: 12px 22px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;                 /* 少し大きめ */
+  font-size: 16px;
   margin-bottom: 24px;
   transition: background-color 0.3s ease;
 }
@@ -33,32 +32,48 @@
   background-color: #616161;
 }
 
+/* 削除ボタン用 */
+.deleteButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  margin-left: 10px;
+}
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
 .userSection {
   background: white;
-  padding: 20px 30px;              /* paddingを広めに */
+  padding: 20px 30px;
   margin-bottom: 20px;
-  border-radius: 10px;             /* 少し丸く */
+  border-radius: 10px;
   border: 1px solid #ddd;
 }
 
 .userSectionTitle {
-  font-size: 20px;                 /* 少し大きめ */
+  font-size: 20px;
   margin-bottom: 14px;
   color: #555;
 }
 
 .list {
-  padding-left: 24px;              /* 左余白を少し広く */
+  padding-left: 24px;
 }
 
 .listItem {
-  margin: 8px 0;                  /* 上下の余白を増やす */
-  font-size: 16px;                /* 文字を少し大きめ */
+  margin: 8px 0;
+  font-size: 16px;
   color: #444;
 }
 
 .message {
-  font-size: 15px;                /* 少し大きく */
+  font-size: 15px;
   color: #888;
-  margin-top: 12px;               /* 上に余白 */
+  margin-top: 12px;
 }
