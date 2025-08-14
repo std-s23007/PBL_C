@@ -4,17 +4,29 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import styles from "./page.module.css";
 
 export default function AdminPage() {
   const router = useRouter();
+  const [user, setUser] = useState(null);
   const [attendanceData, setAttendanceData] = useState({});
   const [userProfiles, setUserProfiles] = useState({});
   const [reviewsData, setReviewsData] = useState({});
   const [loading, setLoading] = useState(true);
 
+  // ログイン状態監視
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // 出席データ、ユーザープロフィール、レビューをリアルタイム取得
   useEffect(() => {
+    if (!user) return;
+
     setLoading(true);
 
     const unsubscribeAttendance = onSnapshot(collection(db, "attendance"), (attendanceSnap) => {
@@ -36,9 +48,11 @@ export default function AdminPage() {
     });
 
     const unsubscribeReviews = onSnapshot(collection(db, "reviews"), (reviewsSnap) => {
+      // reviewsはユーザーごとにまとめる
       const reviewsByUser = {};
       reviewsSnap.forEach((doc) => {
         const data = doc.data();
+        // 例：レビューに userId フィールドがある前提
         const uid = data.userId;
         if (!reviewsByUser[uid]) {
           reviewsByUser[uid] = [];
@@ -56,13 +70,24 @@ export default function AdminPage() {
       unsubscribeUsers();
       unsubscribeReviews();
     };
-  }, []);
+  }, [user]);
 
   // 月の表示フォーマット
   const formatMonthKey = (key) => {
     const [year, month] = key.split("-");
     return `${year}年${parseInt(month)}月`;
   };
+
+  if (!user)
+    return (
+      <div>
+        ログインしていません（ログイン画面から入ってください）
+        <br />
+        <button className={styles.button} onClick={() => router.push("/")}>
+          ログイン画面に戻る
+        </button>
+      </div>
+    );
 
   if (loading) return <div>データ読み込み中...</div>;
 

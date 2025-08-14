@@ -28,7 +28,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/Reason/page.js",
-    "src/app/Calendar/AttenddanceCalendarContent.js"
+    "src/app/Calendar/page.js"
   ],
   "exclude": ["node_modules"]
 }

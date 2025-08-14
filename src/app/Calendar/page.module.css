@@ -94,6 +94,23 @@
   background-color: #b71c1c;
 }
 
+.saveButton {
+  background-color: #1976d2;
+  padding: 16px 30px;
+  border-radius: 26px;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.18);
+  transition: background-color 0.25s ease;
+}
+.saveButton:hover {
+  background-color: #0d47a1;
+}
+
+
 .logoutButton {
   background-color: #757575;
   padding: 9px 18px; /* 少し大きく */
